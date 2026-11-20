@@ -27,7 +27,7 @@
 <body>
   <div class="banner">TESTUMGEBUNG – Übungsbetrieb mit erfundenen Daten</div>
   <h1>Umbau-Fortschritt</h1>
-  <p class="stand">Zuletzt aktualisiert: 20. November 2026 um 15:46 (Berlin)</p>
+  <p class="stand">Zuletzt aktualisiert: 20. November 2026 um 19:32 (Berlin)</p>
   <div class="bar"><span></span></div>
   <p><b>40%</b> des Gesamtplans.</p>
   <p><b>67%</b> von dem, was sich jetzt schon ohne Julius und ohne fehlende Zugänge bauen lässt.<br>
@@ -50,15 +50,17 @@
 
   <div class="box">
     <h2>Was ist neu</h2>
-    <ul><li>Die Vorschau zeigt jetzt wirklich den neuen Rahmen: Vorher war beim Aufruf nur die Anmelde-Maske zu sehen, der Rahmen lag unsichtbar darunter. Jetzt liegt die Seitenleiste mit den acht Bereichen sichtbar obenauf.</li>
-<li>Der Rahmen: links eine Seitenleiste mit acht Bereichen (Dashboard, Geschäftspartner, Neue Prüfung, Monitoring, KI-Assistent, Berichte &amp; Audit, Team, Einstellungen) im neuen Automati-Grün-Look. Die bestehende Prüfung bleibt unverändert und ist über die Leiste erreichbar; neue Bereiche zeigen vorerst nur eine kurze „Kommt bald&quot;-Seite.</li>
-<li>Du kannst den neuen Rahmen ohne Anmeldung ansehen: einfach „?vorschau=shell&quot; an die Testadresse hängen. Diese Vorschau schaltet nichts frei und zeigt keine Daten; die Anmeldung selbst ändert sich nicht.</li>
-<li>Neue Tests und ein Durchlauf im echten Browser (mit echten Mausklicks, am Handy und am Computer) beweisen: der Rahmen ist jetzt sichtbar und anklickbar, bringt keinen neuen Fehler, und am eigentlichen Programm wurde nichts geändert. Alles lief offline im Testmodus.</li></ul>
+    <ul><li>Neu ist der Bereich „Geschäftspartner“: eine Liste aller geprüften Firmen mit Ampel (grün/gelb/rot nach dem bekannten Score), Land und letzter Prüfung – mit Suche und Filter.</li>
+<li>Zu jeder Firma gibt es eine Akte: Stammdaten, ein Verlauf der Scores als Balken und alle Prüfungen mit Datum, Score und Prüf-Nummer. Der PDF-Bericht läuft weiter über die vorhandene Ansicht „Akten &amp; Ordner“.</li>
+<li>Die bestehende Prüfung ändert sich nicht. Nach einer Prüfung gibt es einen Knopf „Zur Akte dieses Geschäftspartners“.</li>
+<li>Was du noch festlegst, ist sichtbar als „PLATZHALTER – Julius legt fest“ markiert (z. B. Status-Namen). Ohne Anmeldung kannst du die Liste und eine Akte mit Beispiel-Firmen ansehen: „?vorschau=shell“ an die Testadresse hängen, dann links „Geschäftspartner“.</li>
+<li>Alles lief offline im Testmodus, nur mit erfundenen Firmen. Neue Tests und ein Durchlauf im echten Browser (am Handy und am Computer) belegen es ohne neue Fehler. Der Weg mit echter Anmeldung kommt, sobald die Übungs-Datenbank steht.</li></ul>
   </div>
 
   <div class="box">
     <h2>Zum Anklicken</h2>
     <ul><li><a href="https://test.checker.automatilabs.de/">Testumgebung (Startseite)</a></li>
+<li><a href="https://test.checker.automatilabs.de/?vorschau=shell">Geschäftspartner-Vorschau (ohne Anmeldung)</a></li>
 <li><a href="https://test.checker.automatilabs.de/umbau/">Diese Fortschrittsseite</a></li></ul>
   </div>
 
