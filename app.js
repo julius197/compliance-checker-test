@@ -320,6 +320,17 @@ function setDRUCK_SPRACHE(wert) {
 	DRUCK_SPRACHE = wert;
 }
 
+function historieLesekopie() {
+	function tiefFrieren(wert) {
+		if (wert === null || typeof wert !== "object") return wert;
+		Object.getOwnPropertyNames(wert).forEach(function(name) {
+			tiefFrieren(wert[name]);
+		});
+		return Object.freeze(wert);
+	}
+	return tiefFrieren(window.structuredClone(HISTORY_ROWS));
+}
+
 function t(key, de) {
 	return de;
 }
