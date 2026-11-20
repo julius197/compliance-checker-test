@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Umbau-Fortschritt · Compliance Checker</title>
+<style>
+  :root { --gruen:#389650; --dunkel:#1f2937; }
+  body { font:16px/1.6 system-ui,-apple-system,sans-serif; color:var(--dunkel); max-width:760px;
+         margin:0 auto; padding:20px; background:#f8fafc; }
+  .banner { background:#b45309; color:#fff; text-align:center; padding:6px; border-radius:8px;
+            font-weight:600; margin-bottom:16px; }
+  h1 { font-size:24px; margin:.2em 0; }
+  .bar { background:#e5e7eb; border-radius:999px; height:18px; overflow:hidden; margin:10px 0; }
+  .bar > span { display:block; height:100%; background:var(--gruen); width:40%; }
+  ul { list-style:none; padding:0; }
+  li { padding:7px 0; border-bottom:1px solid #eef2f7; }
+  .ic { display:inline-block; width:1.4em; }
+  .st { color:#6b7280; font-size:14px; }
+  small { color:#6b7280; }
+  .stand { color:#6b7280; font-size:14px; }
+  a { color:#0369a1; }
+  .box { background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:12px 16px; margin:14px 0; }
+</style>
+</head>
+<body>
+  <div class="banner">TESTUMGEBUNG – Übungsbetrieb mit erfundenen Daten</div>
+  <h1>Umbau-Fortschritt</h1>
+  <p class="stand">Zuletzt aktualisiert: 20. November 2026 um 08:58 (Berlin)</p>
+  <div class="bar"><span></span></div>
+  <p><b>40%</b> des Gesamtplans.</p>
+
+  <div class="box">
+    <h2>Die Schritte</h2>
+    <ul><li><span class="ic">✅</span> <b>E0</b> Fundament + Testumgebung + diese Seite <span class="st">(fertig)</span></li>
+<li><span class="ic">⛔</span> <b>E1</b> Datenbank sauber als Code + Zugriffsregeln <span class="st">(wartet)</span> <small>– wartet auf: Struktur-Export der Datenbank (Julius)</small></li>
+<li><span class="ic">⏳</span> <b>E2</b> Zahlung &amp; Rechnungen robust (auch SEPA) <span class="st">(geplant)</span></li>
+<li><span class="ic">🔨</span> <b>E3</b> Prüf-Motor stabiler (Sanktionslisten, Fehler) <span class="st">(in Arbeit)</span> <small>– wartet auf: Übungs-Server (Cloudflare) + Test-Adresse zum Ausprobieren</small></li>
+<li><span class="ic">✅</span> <b>E4</b> Oberfläche absichern <span class="st">(fertig)</span></li>
+<li><span class="ic">✅</span> <b>E5</b> Umbau in saubere Bausteine <span class="st">(fertig)</span></li>
+<li><span class="ic">🔨</span> <b>E6</b> Automatische Tests im echten Browser + Last <span class="st">(in Arbeit)</span></li>
+<li><span class="ic">⛔</span> <b>E7</b> Neue Grenzen &amp; Preise <span class="st">(wartet)</span> <small>– wartet auf: Bauauftrag von Julius</small></li>
+<li><span class="ic">⏳</span> <b>E8</b> Betrieb &amp; Warnmeldungen <span class="st">(geplant)</span></li>
+<li><span class="ic">⛔</span> <b>E9</b> Umschalten auf echt <span class="st">(wartet)</span> <small>– wartet auf: Julius' ausdrückliches OK</small></li></ul>
+  </div>
+
+  <div class="box">
+    <h2>Was ist neu</h2>
+    <ul><li>Die automatischen Vergleichs-Tests prüfen jetzt auch den Fall, dass mehrere Aufträge gleichzeitig in der Warteschlange warten – so bleibt bewiesen, dass sich der Prüf-Motor dabei genauso verhält wie vorher. Ein Extra-Test zeigt, dass schon eine winzige Abweichung sofort auffällt.</li>
+<li>Beim Zusammenbauen des Prüf-Motors zählt das Werkzeug jetzt genau nach, wie oft alte Beispiel-Namen ersetzt werden. Taucht so ein Name an einer unerwarteten Stelle auf, bricht der Bau ab, statt ihn still durchzulassen.</li>
+<li>Eine interne Vergleichs-Datei wurde von alten Beispiel-Namen und einer alten Adresse befreit, damit die Sicherheits-Kontrolle auch sie sauber durchwinkt. Ein Test baut die Datei automatisch nach und wacht darüber.</li>
+<li>Der Umbau in saubere Bausteine ist fertig. Der Prüf-Motor antwortet auf jede Anfrage beweisbar genauso wie vorher – nur ordentlicher aufgeteilt.</li>
+<li>Alles läuft grün und offline im Testmodus – nichts geht an echte Kunden oder nach live.</li></ul>
+  </div>
+
+  <div class="box">
+    <h2>Zum Anklicken</h2>
+    <ul><li><a href="https://test.checker.automatilabs.de/">Testumgebung (Startseite)</a></li>
+<li><a href="https://test.checker.automatilabs.de/umbau/">Diese Fortschrittsseite</a></li></ul>
+  </div>
+
+  <div class="box">
+    <h2>Wartet auf</h2>
+    <ul><li>Internet-Adresse test.checker.automatilabs.de muss eingerichtet werden</li>
+<li>Die beiden Code-Ablagen (privat + öffentlich) müssen angelegt werden</li>
+<li>Übungs-Datenbank muss angelegt werden</li>
+<li>Struktur-Export der echten Datenbank (nur Aufbau) für die endgültige Fassung der Zugriffsregeln</li>
+<li>Zugang zum Übungs-Server (Cloudflare) muss eingerichtet werden</li>
+<li>Zahlung im Übungsmodus (Stripe Test) muss freigeschaltet werden</li>
+<li>Sicherheits-Prüfsumme für eine mitgenutzte fremde Programm-Datei (lässt sich nur mit Internet ermitteln)</li></ul>
+  </div>
+
+  <p class="stand">Falls die Test-Adresse noch nicht geht, hier die Ersatz-Adresse:<br>
+    <a href="https://julius197.github.io/compliance-checker-test/umbau/">https://julius197.github.io/compliance-checker-test/umbau/</a></p>
+</body>
+</html>
