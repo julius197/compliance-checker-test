@@ -23,7 +23,7 @@
   'use strict';
 
   // --- Vom Build eingesetzt (siehe oben) ---
-  var CSS = "/* ============================================================================\n   Estate-Design-Tokens fuer die Compliance-Plattform-Shell (S1).\n\n   Quelle der Werte: automati-real-estate @ 86dd138, src/index.css (@theme).\n   Diese Datei liegt auf Julius' Mac, NICHT auf der Box. Die hier gesetzten\n   Werte sind 1:1 aus dem Prompt (Zeus-Vorgabe S1) uebernommen; sie koennen\n   spaeter gegen die Original-@theme-Quelle gegengeprueft werden.\n\n   Nur BELEGTE Werte stehen hier als feste Variablen. Alles, was in der\n   Estate-Quelle keine Entsprechung hat (Seitenleisten-Breite, Icon-Satz,\n   Shell-Abstaende, Mobil-Muster), ist unten als PLATZHALTER markiert, weil\n   Estate keine Seitenleiste kennt.\n   ============================================================================ */\n\n:root {\n  /* Schrift (Inter laedt die Seite bereits; kein neuer Font-Link). */\n  --cc-font: 'Inter Variable', Inter, ui-sans-serif, system-ui, -apple-system,\n             'Segoe UI', Roboto, Arial, sans-serif;\n\n  /* Flaeche / Szene */\n  --cc-scene: #f2f2f0;\n\n  /* Brand (weisser Text erst ab 700) */\n  --cc-brand-50:  #eefbee;\n  --cc-brand-100: #ddf6dd;\n  --cc-brand-200: #bdeabf;\n  --cc-brand-300: #94da98;\n  --cc-brand-400: #6cc471;\n  --cc-brand-500: #4caf50;\n  --cc-brand-600: #36954d;\n  --cc-brand-700: #28773d;\n  --cc-brand-800: #1e5e31;\n  --cc-brand-900: #174825;\n  --cc-brand-950: #092913;\n\n  /* Ink (Text = ink-900) */\n  --cc-ink-50:  #f8fbfb;\n  --cc-ink-100: #f0f5f6;\n  --cc-ink-200: #e0e7e8;\n  --cc-ink-300: #ced6d7;\n  --cc-ink-400: #99a3a5;\n  --cc-ink-500: #626e71;\n  --cc-ink-600: #4d595c;\n  --cc-ink-700: #3b484a;\n  --cc-ink-800: #2d393b;\n  --cc-ink-900: #232e30;\n  --cc-ink-950: #101819;\n\n  /* Ampel (Fuellung / Text) */\n  --cc-urgent:      #ff3b30;\n  --cc-urgent-text: #c4170e;\n  --cc-pending:      #ff9500;\n  --cc-pending-text: #9a5200;\n  --cc-ok:      #34c759;\n  --cc-ok-text: #1a6e2e;\n\n  /* Bewegung (prefers-reduced-motion schaltet sie in shell.css ab) */\n  --cc-dauer-kurz:   120ms;\n  --cc-dauer-mittel: 180ms;\n  --cc-dauer-lang:   260ms;\n  --cc-ease-out: cubic-bezier(0.16, 1, 0.3, 1);\n\n  /* Muster (belegt) */\n  --cc-karte-radius:   1rem;\n  --cc-karte-flaeche:  #ffffff;\n  --cc-karte-rahmen:   inset 0 0 0 1px var(--cc-ink-200);\n  --cc-nav-radius:     0.75rem;\n  --cc-fokus-breite:   2px;\n  --cc-fokus-farbe:    var(--cc-brand-600);\n  --cc-fokus-abstand:  2px;\n  --cc-touch-min:      44px;\n  --cc-popover-schatten: 0 20px 50px -20px rgba(0, 0, 0, 0.35);\n\n  /* ---- PLATZHALTER - aus Estate-Quelle uebernehmen (Estate hat keine Seitenleiste) ---- */\n  --cc-shell-breite: 248px;     /* PLATZHALTER - aus Estate-Quelle uebernehmen */\n  --cc-shell-abstand: 16px;     /* PLATZHALTER - aus Estate-Quelle uebernehmen */\n  --cc-shell-mobil-bar: 52px;   /* PLATZHALTER - aus Estate-Quelle uebernehmen */\n  /* Icon-Satz: bis zur Estate-Quelle schlichte Strich-SVGs (siehe shell.js). */\n}\n\n/* ============================================================================\n   Shell-Layout (S1) der Compliance-Plattform. Nutzt die Estate-Tokens aus\n   estate-tokens.css. Wird vom Build (apps/web/build.mjs -> baueShellJs) als\n   String in dist/shell.js eingebettet und zur Laufzeit als <style id=\"ccShellStil\">\n   eingespielt (der Dev-Server kennt .css nicht, darum kein .css-Artefakt).\n\n   Minimal-invasiv: die Shell legt sich NEBEN die bestehende App. Werte, die in\n   der Estate-Quelle nicht belegt sind (Seitenleisten-Breite, Abstaende, Mobil-\n   Muster), kommen aus den PLATZHALTER-Variablen in estate-tokens.css.\n   ============================================================================ */\n\n/* Die Shell ist standardmaessig unsichtbar; erst body.cc-shell-an zeigt sie. */\n.cc-shell { display: none; }\n.cc-shell-modul-wrap { display: none; }\n\n/* ---------------------------------------------------------------- Desktop -- */\nbody.cc-shell-an .cc-shell { display: flex; }\n\n/* Inhalt der bestehenden App nach rechts schieben, damit die feste Leiste\n   nichts verdeckt (\"nichts abgeschnitten\"). Nur ab Tablet-Breite. */\n@media (min-width: 768px) {\n  body.cc-shell-an { padding-left: var(--cc-shell-breite); }\n}\n\n/* Seitenleiste */\n.cc-shell {\n  position: fixed;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  width: var(--cc-shell-breite);\n  flex-direction: column;\n  gap: 4px;\n  box-sizing: border-box;\n  padding: calc(var(--cc-shell-abstand) + 28px) 12px var(--cc-shell-abstand);\n  background: var(--cc-karte-flaeche);\n  box-shadow: inset -1px 0 0 0 var(--cc-ink-200);\n  font-family: var(--cc-font);\n  color: var(--cc-ink-900);\n  z-index: 9000;                 /* ueber App-Inhalt, unter App-Modals (10001+) und Banner (99999) */\n  overflow-y: auto;\n}\n\n.cc-shell-marke {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  padding: 6px 10px 14px;\n  font-weight: 700;\n  font-size: 15px;\n  letter-spacing: .2px;\n  color: var(--cc-ink-900);\n}\n.cc-shell-marke .cc-shell-punkt {\n  width: 10px; height: 10px; border-radius: 50%;\n  background: var(--cc-brand-500);\n  box-shadow: 0 0 0 4px var(--cc-brand-100);\n  flex: 0 0 auto;\n}\n\n.cc-shell-nav { display: flex; flex-direction: column; gap: 2px; }\n\n/* Nav-Eintrag */\n.cc-nav-eintrag {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  width: 100%;\n  min-height: var(--cc-touch-min);\n  padding: 9px 12px;\n  border: 0;\n  border-radius: var(--cc-nav-radius);\n  background: transparent;\n  color: var(--cc-ink-700);\n  font-family: var(--cc-font);\n  font-size: 14px;\n  font-weight: 500;\n  text-align: left;\n  cursor: pointer;\n  transition: background-color var(--cc-dauer-kurz) var(--cc-ease-out),\n              color var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-nav-eintrag svg { width: 20px; height: 20px; flex: 0 0 auto; }\n.cc-nav-eintrag:hover { background: var(--cc-ink-100); color: var(--cc-ink-900); }\n.cc-nav-eintrag[aria-current=\"page\"] {\n  background: var(--cc-brand-50);\n  color: var(--cc-brand-800);\n  font-weight: 600;\n}\n.cc-nav-eintrag:focus-visible {\n  outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe);\n  outline-offset: var(--cc-fokus-abstand);\n}\n.cc-nav-eintrag.cc-gesperrt { color: var(--cc-ink-400); }\n\n/* Leerzustand-/Hinweis-Flaeche (rechts neben der Leiste) */\nbody.cc-shell-an .cc-shell-modul-wrap[data-cc-sichtbar=\"1\"] { display: block; }\n.cc-shell-modul-wrap {\n  position: fixed;\n  top: 0; right: 0; bottom: 0;\n  left: 0;\n  z-index: 8000;              /* unter der Leiste (9000), damit die Nav klickbar bleibt */\n  background: var(--cc-scene);\n  overflow-y: auto;\n  font-family: var(--cc-font);\n  color: var(--cc-ink-900);\n}\n@media (min-width: 768px) {\n  .cc-shell-modul-wrap { left: var(--cc-shell-breite); }\n}\n\n.cc-leer {\n  max-width: 460px;\n  margin: 14vh auto 0;\n  padding: 40px 28px;\n  text-align: center;\n}\n.cc-leer-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 64px; height: 64px;\n  margin-bottom: 20px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  color: var(--cc-brand-600);\n}\n.cc-leer-icon svg { width: 30px; height: 30px; }\n.cc-leer-titel { margin: 0 0 8px; font-size: 20px; font-weight: 700; color: var(--cc-ink-900); }\n.cc-leer-satz { margin: 0 0 6px; font-size: 14px; line-height: 1.5; color: var(--cc-ink-600); }\n.cc-leer-bald {\n  display: inline-block;\n  margin-top: 14px;\n  padding: 5px 12px;\n  border-radius: 999px;\n  background: var(--cc-brand-50);\n  color: var(--cc-brand-800);\n  font-size: 12px;\n  font-weight: 600;\n}\n.cc-leer-hinweis {\n  margin-top: 18px;\n  font-size: 13px;\n  color: var(--cc-pending-text);\n}\n\n/* Primaer-Knopf (fuer \"Bisherige Ansicht oeffnen\", falls eine Funktion existiert) */\n.cc-knopf {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  min-height: var(--cc-touch-min);\n  margin-top: 18px;\n  padding: 10px 18px;\n  border: 0;\n  border-radius: 999px;\n  background: var(--cc-brand-700);\n  color: #ffffff;\n  font-family: var(--cc-font);\n  font-size: 14px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background-color var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-knopf:hover { background: var(--cc-brand-800); }\n.cc-knopf:focus-visible {\n  outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe);\n  outline-offset: var(--cc-fokus-abstand);\n}\n\n/* ----------------------------------------------------------------- Mobil -- */\n/* PLATZHALTER-Muster: unter 768px klappt die Leiste ein; ein Balken mit\n   Umschalter oben. Estate hat keine Seitenleiste -> spaeter gegenpruefen. */\n.cc-shell-balken { display: none; }\n@media (max-width: 767.98px) {\n  body.cc-shell-an .cc-shell-balken {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    position: fixed;\n    top: 0; left: 0; right: 0;\n    height: var(--cc-shell-mobil-bar);\n    padding: 0 12px;\n    background: var(--cc-karte-flaeche);\n    box-shadow: inset 0 -1px 0 0 var(--cc-ink-200);\n    font-family: var(--cc-font);\n    z-index: 9001;\n  }\n  body.cc-shell-an { padding-top: var(--cc-shell-mobil-bar); }\n  .cc-shell {\n    top: var(--cc-shell-mobil-bar);\n    width: min(84vw, var(--cc-shell-breite));\n    transform: translateX(-102%);\n    transition: transform var(--cc-dauer-mittel) var(--cc-ease-out);\n    box-shadow: var(--cc-popover-schatten);\n  }\n  body.cc-shell-auf .cc-shell { transform: translateX(0); }\n  .cc-shell-modul-wrap { top: var(--cc-shell-mobil-bar); }\n}\n.cc-shell-umschalter {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: var(--cc-touch-min);\n  height: var(--cc-touch-min);\n  border: 0;\n  border-radius: var(--cc-nav-radius);\n  background: transparent;\n  color: var(--cc-ink-800);\n  cursor: pointer;\n}\n.cc-shell-umschalter:focus-visible {\n  outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe);\n  outline-offset: var(--cc-fokus-abstand);\n}\n.cc-shell-balken-titel { font-weight: 700; font-size: 15px; color: var(--cc-ink-900); }\n\n/* Bewegung aus, wenn der Nutzer das will. */\n@media (prefers-reduced-motion: reduce) {\n  .cc-nav-eintrag, .cc-knopf, .cc-shell { transition: none; }\n}\n\n/* ------------------------------------------- S2 Geschäftspartner + Akte -- */\n/* Von der Shell selbst gerenderte Inhalte im .cc-shell-modul-wrap. Estate-Tokens,\n   kein neues Design: weisse Karten, Ampel aus --cc-ok/-pending/-urgent. */\n.cc-partner, .cc-akte {\n  max-width: 880px;\n  margin: 0 auto;\n  padding: clamp(18px, 4vw, 36px) clamp(14px, 4vw, 28px) 48px;\n  box-sizing: border-box;\n}\n.cc-partner-kopf {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 16px;\n  flex-wrap: wrap;\n  margin-bottom: 18px;\n}\n.cc-partner-titel { margin: 0; font-size: 22px; font-weight: 700; color: var(--cc-ink-900); }\n.cc-partner-unter { margin: 4px 0 0; font-size: 13px; color: var(--cc-ink-500); }\n\n.cc-partner-such { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }\n.cc-such-feld {\n  flex: 1 1 220px;\n  min-height: var(--cc-touch-min);\n  padding: 9px 14px;\n  border: 0;\n  border-radius: 999px;\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-family: var(--cc-font);\n  font-size: 14px;\n  color: var(--cc-ink-900);\n}\n.cc-such-feld:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-ampel-filter { display: flex; flex-wrap: wrap; gap: 6px; }\n.cc-chip {\n  min-height: 36px;\n  padding: 6px 14px;\n  border: 0;\n  border-radius: 999px;\n  background: var(--cc-ink-100);\n  color: var(--cc-ink-700);\n  font-family: var(--cc-font);\n  font-size: 13px;\n  font-weight: 600;\n  cursor: pointer;\n}\n.cc-chip:hover { background: var(--cc-ink-200); }\n.cc-chip-an { background: var(--cc-brand-700); color: #ffffff; }\n.cc-chip:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n\n.cc-partner-liste { display: flex; flex-direction: column; gap: 10px; }\n.cc-partner-zeile {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 14px;\n  width: 100%;\n  min-height: var(--cc-touch-min);\n  padding: 14px 18px;\n  border: 0;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-family: var(--cc-font);\n  text-align: left;\n  cursor: pointer;\n  transition: box-shadow var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-partner-zeile:hover { box-shadow: var(--cc-karte-rahmen), 0 6px 20px -12px rgba(0, 0, 0, 0.3); }\n.cc-partner-zeile:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-pz-links { min-width: 0; }\n.cc-pz-name { font-size: 15px; font-weight: 600; color: var(--cc-ink-900); overflow-wrap: anywhere; }\n.cc-pz-meta { margin-top: 4px; font-size: 12.5px; color: var(--cc-ink-500); display: flex; flex-wrap: wrap; gap: 6px; }\n.cc-pz-sep { opacity: .5; }\n.cc-partner-keine { margin: 10px 2px; font-size: 13px; color: var(--cc-ink-500); }\n\n/* Ampel-Pille */\n.cc-ampel {\n  display: inline-flex;\n  align-items: center;\n  gap: 7px;\n  flex: 0 0 auto;\n  padding: 5px 12px 5px 10px;\n  border-radius: 999px;\n  font-size: 14px;\n  font-weight: 700;\n  font-variant-numeric: tabular-nums;\n}\n.cc-ampel-punkt { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }\n.cc-ampel-ok      { background: rgba(52, 199, 89, 0.14);  color: var(--cc-ok-text); }\n.cc-ampel-ok      .cc-ampel-punkt { background: var(--cc-ok); }\n.cc-ampel-pending { background: rgba(255, 149, 0, 0.16);  color: var(--cc-pending-text); }\n.cc-ampel-pending .cc-ampel-punkt { background: var(--cc-pending); }\n.cc-ampel-urgent  { background: rgba(255, 59, 48, 0.14);  color: var(--cc-urgent-text); }\n.cc-ampel-urgent  .cc-ampel-punkt { background: var(--cc-urgent); }\n.cc-ampel-grau    { background: var(--cc-ink-100); color: var(--cc-ink-500); }\n.cc-ampel-grau    .cc-ampel-punkt { background: var(--cc-ink-400); }\n\n/* Platzhalter-Markierung */\n.cc-platzhalter {\n  display: inline-block;\n  padding: 2px 8px;\n  border-radius: 6px;\n  background: rgba(255, 149, 0, 0.12);\n  color: var(--cc-pending-text);\n  font-size: 12px;\n  font-weight: 600;\n}\n\n/* Knopf-Varianten */\n.cc-knopf-leise { background: var(--cc-ink-100); color: var(--cc-ink-800); margin-top: 0; }\n.cc-knopf-leise:hover { background: var(--cc-ink-200); }\n\n/* ---- Akte ---- */\n.cc-akte-kopf { margin-bottom: 10px; }\n.cc-akte-zurueck {\n  display: inline-flex;\n  align-items: center;\n  min-height: 40px;\n  padding: 6px 14px 6px 10px;\n  border: 0;\n  border-radius: 999px;\n  background: transparent;\n  color: var(--cc-brand-800);\n  font-family: var(--cc-font);\n  font-size: 14px;\n  font-weight: 600;\n  cursor: pointer;\n}\n.cc-akte-zurueck:hover { background: var(--cc-brand-50); }\n.cc-akte-zurueck:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-akte-titelzeile { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 4px 2px 18px; flex-wrap: wrap; }\n.cc-akte-name { margin: 0; font-size: 22px; font-weight: 700; color: var(--cc-ink-900); overflow-wrap: anywhere; }\n\n.cc-karte {\n  margin-bottom: 14px;\n  padding: 18px 20px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n}\n.cc-karte-titel { margin: 0 0 12px; font-size: 13px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--cc-ink-500); }\n\n.cc-stamm-zeile { display: flex; justify-content: space-between; gap: 14px; padding: 8px 0; border-top: 1px solid var(--cc-ink-100); }\n.cc-akte-stamm .cc-stamm-zeile:first-of-type { border-top: 0; }\n.cc-stamm-label { font-size: 13px; color: var(--cc-ink-500); }\n.cc-stamm-wert { font-size: 14px; font-weight: 600; color: var(--cc-ink-900); text-align: right; overflow-wrap: anywhere; }\n\n/* Score-Verlauf (SVG-Balken; Farbe per fill, keine inline styles) */\n.cc-verlauf { overflow-x: auto; }\n.cc-verlauf-svg { display: block; max-width: 100%; height: 120px; }\n.cc-verlauf-bar.cc-ampel-ok { fill: var(--cc-ok); }\n.cc-verlauf-bar.cc-ampel-pending { fill: var(--cc-pending); }\n.cc-verlauf-bar.cc-ampel-urgent { fill: var(--cc-urgent); }\n.cc-verlauf-bar.cc-ampel-grau { fill: var(--cc-ink-300); }\n.cc-verlauf-zahl { fill: var(--cc-ink-600); font-size: 12px; font-weight: 600; font-family: var(--cc-font); }\n\n/* Von der Shell per Klasse aus-/eingeblendet (statt inline-Stil) */\n.cc-aus { display: none !important; }\n\n/* S2: schwebender Knopf „Zur Akte dieses Geschäftspartners\" (nur bei aktivem #report) */\n.cc-zur-akte {\n  position: fixed;\n  right: 20px;\n  bottom: 20px;\n  z-index: 9500;                 /* über App-Inhalt, unter App-Modals (10001+) */\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  min-height: var(--cc-touch-min);\n  padding: 11px 18px;\n  border: 0;\n  border-radius: 999px;\n  background: var(--cc-brand-700);\n  color: #ffffff;\n  font-family: var(--cc-font);\n  font-size: 14px;\n  font-weight: 600;\n  cursor: pointer;\n  box-shadow: var(--cc-popover-schatten);\n}\n.cc-zur-akte svg { width: 18px; height: 18px; flex: 0 0 auto; }\n.cc-zur-akte:hover { background: var(--cc-brand-800); }\n.cc-zur-akte:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n@media (min-width: 768px) { body.cc-shell-an .cc-zur-akte { right: 24px; bottom: 24px; } }\n\n/* Prüfhistorie */\n.cc-hist-liste { display: flex; flex-direction: column; }\n.cc-hist-zeile { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-top: 1px solid var(--cc-ink-100); }\n.cc-hist-liste .cc-hist-zeile:first-child { border-top: 0; }\n.cc-hist-datum { flex: 0 0 96px; font-size: 13px; font-weight: 600; color: var(--cc-ink-800); font-variant-numeric: tabular-nums; }\n.cc-hist-pid { flex: 1 1 auto; text-align: right; font-size: 12.5px; color: var(--cc-ink-500); overflow-wrap: anywhere; }\n\n.cc-akte-aktion { margin-top: 8px; }\n\n/* ------------------------------------------------- Vorschau (nur test) -- */\n/* NUR additiv unter body.cc-shell-vorschau (gesetzt von shell.js, wenn\n   APP_ENV === 'test' UND der Vorschau-Schalter in der Adresse steht). Ohne\n   Login liegt sonst das Login-Gate (z-index 9999) ueber der Shell und man\n   sieht nur die Maske. Hier heben wir Leiste, Inhalt und Mobil-Balken auf\n   EINEN gemeinsamen Wert (--cc-z-vorschau = 10000): ueber das Login-Gate\n   (9999), aber unter den App-Modals/Knoepfen (10001+) und dem Testbanner\n   (99999). Die Reihenfolge Leiste > Inhalt kommt aus der DOM-Reihenfolge\n   (nav wird in shell.js NACH dem Inhalt angehaengt), nicht aus hoeheren Zahlen.\n   Das Start-Gate (10000) liegt im DOM vor der Shell und wird darum von ihr\n   ueberdeckt. Das ausgeklappte Mobil-Menue ist dieselbe .cc-shell und erbt den\n   Wert. Die Normal-Ansicht (9000/8000/9001) bleibt unberuehrt. */\nbody.cc-shell-vorschau { --cc-z-vorschau: 10000; }\nbody.cc-shell-vorschau .cc-shell { z-index: var(--cc-z-vorschau); }\nbody.cc-shell-vorschau .cc-shell-modul-wrap { z-index: var(--cc-z-vorschau); }\nbody.cc-shell-vorschau .cc-shell-balken { z-index: var(--cc-z-vorschau); }\n\n/* ---------------------------------------------------- S3 Dashboard (additiv) -- */\n/* NUR neue .cc-dash-*-Regeln; bestehende Regeln + alle z-index-Werte unveraendert (shell-vorschau C2).\n   Design folgt Estate (ruhige weisse Karten, vorhandene Tokens, Ampel aus den .cc-ampel-*-Regeln oben);\n   Struktur vor Optik. Kein neues z-index, keine neue Farbe ausserhalb der Tokens. Grundlayout bleibt\n   Claude-/ChatGPT-Stil (Leiste links, Inhalt hier rechts im #ccShellModul). */\n.cc-dash {\n  max-width: 880px;\n  margin: 0 auto;\n  padding: clamp(18px, 4vw, 36px) clamp(14px, 4vw, 28px) 56px;\n  box-sizing: border-box;\n}\n.cc-dash-kopf { margin-bottom: 20px; }\n.cc-dash-titel { margin: 0; font-size: 22px; font-weight: 700; color: var(--cc-ink-900); }\n.cc-dash-unter { margin: 4px 0 0; font-size: 13px; color: var(--cc-ink-500); }\n\n.cc-dash-bereich { margin-bottom: 22px; }\n.cc-dash-bereich-titel {\n  margin: 0 0 12px;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: .4px;\n  text-transform: uppercase;\n  color: var(--cc-ink-500);\n}\n\n/* Bereich 1: Handlungsbedarf – Ampel NUR hier. */\n.cc-dash-bedarf-liste { display: flex; flex-direction: column; gap: 10px; }\n.cc-dash-bedarf-zeile {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 14px;\n  width: 100%;\n  min-height: var(--cc-touch-min);\n  padding: 14px 18px;\n  border: 0;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-family: var(--cc-font);\n  text-align: left;\n  cursor: pointer;\n  transition: box-shadow var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-dash-bedarf-zeile:hover { box-shadow: var(--cc-karte-rahmen), 0 6px 20px -12px rgba(0, 0, 0, 0.3); }\n.cc-dash-bedarf-zeile:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-dash-bz-links { min-width: 0; }\n.cc-dash-bz-name { font-size: 15px; font-weight: 600; color: var(--cc-ink-900); overflow-wrap: anywhere; }\n.cc-dash-bz-meta { margin-top: 4px; font-size: 12.5px; color: var(--cc-ink-500); }\n/* Leer-Fall: ruhiger Satz OHNE Ampelfarbe. */\n.cc-dash-ruhig {\n  margin: 0;\n  padding: 16px 18px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-size: 14px;\n  color: var(--cc-ink-600);\n}\n\n/* Bereich 2: Tages-Briefing. */\n.cc-dash-briefing {\n  padding: 18px 20px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n}\n.cc-dash-briefing .cc-dash-bereich-titel { margin-bottom: 14px; }\n.cc-dash-kennzahlen {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));\n  gap: 12px;\n}\n.cc-dash-kennzahl {\n  padding: 12px 14px;\n  border-radius: var(--cc-nav-radius);\n  background: var(--cc-scene);\n}\n.cc-dash-kz-zahl { font-size: 24px; font-weight: 700; color: var(--cc-ink-900); font-variant-numeric: tabular-nums; }\n.cc-dash-kz-text { margin-top: 2px; font-size: 12.5px; color: var(--cc-ink-500); }\n.cc-dash-letzte { margin: 14px 0 0; font-size: 13px; color: var(--cc-ink-600); }\n.cc-dash-letzte-label { color: var(--cc-ink-500); }\n.cc-dash-letzte-firma { font-weight: 600; color: var(--cc-ink-800); overflow-wrap: anywhere; }\n\n/* Bereich 3: Bereiche wie Estate – ruhige Karten. */\n.cc-dash-abteilungen {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n  gap: 12px;\n}\n.cc-dash-karte {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  gap: 8px;\n  min-height: var(--cc-touch-min);\n  padding: 16px 18px;\n  border: 0;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-family: var(--cc-font);\n  text-align: left;\n  cursor: pointer;\n  transition: box-shadow var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-dash-karte:hover { box-shadow: var(--cc-karte-rahmen), 0 6px 20px -12px rgba(0, 0, 0, 0.3); }\n.cc-dash-karte:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-dash-karte-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 40px; height: 40px;\n  border-radius: var(--cc-nav-radius);\n  background: var(--cc-brand-50);\n  color: var(--cc-brand-700);\n}\n.cc-dash-karte-icon svg { width: 22px; height: 22px; }\n.cc-dash-karte-titel { font-size: 15px; font-weight: 600; color: var(--cc-ink-900); }\n.cc-dash-karte-satz { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--cc-ink-500); }\n\n/* KI-Platz: zentrale Flaeche, nur Markierung (ab S4 der Assistent). */\n.cc-dash-ki {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  text-align: center;\n  gap: 12px;\n  margin-top: 6px;\n  padding: 32px 24px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-brand-50);\n  box-shadow: inset 0 0 0 1px var(--cc-brand-100);\n}\n.cc-dash-ki-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 56px; height: 56px;\n  border-radius: 50%;\n  background: var(--cc-karte-flaeche);\n  color: var(--cc-brand-600);\n  box-shadow: var(--cc-karte-rahmen);\n}\n.cc-dash-ki-icon svg { width: 30px; height: 30px; }\n.cc-dash-ki-satz { margin: 0; max-width: 420px; font-size: 14px; line-height: 1.5; color: var(--cc-brand-900); }\n";
+  var CSS = "/* ============================================================================\n   Estate-Design-Tokens fuer die Compliance-Plattform-Shell (S1).\n\n   Quelle der Werte: automati-real-estate @ 86dd138, src/index.css (@theme).\n   Diese Datei liegt auf Julius' Mac, NICHT auf der Box. Die hier gesetzten\n   Werte sind 1:1 aus dem Prompt (Zeus-Vorgabe S1) uebernommen; sie koennen\n   spaeter gegen die Original-@theme-Quelle gegengeprueft werden.\n\n   Nur BELEGTE Werte stehen hier als feste Variablen. Alles, was in der\n   Estate-Quelle keine Entsprechung hat (Seitenleisten-Breite, Icon-Satz,\n   Shell-Abstaende, Mobil-Muster), ist unten als PLATZHALTER markiert, weil\n   Estate keine Seitenleiste kennt.\n   ============================================================================ */\n\n:root {\n  /* Schrift (Inter laedt die Seite bereits; kein neuer Font-Link). */\n  --cc-font: 'Inter Variable', Inter, ui-sans-serif, system-ui, -apple-system,\n             'Segoe UI', Roboto, Arial, sans-serif;\n\n  /* Flaeche / Szene */\n  --cc-scene: #f2f2f0;\n\n  /* Brand (weisser Text erst ab 700) */\n  --cc-brand-50:  #eefbee;\n  --cc-brand-100: #ddf6dd;\n  --cc-brand-200: #bdeabf;\n  --cc-brand-300: #94da98;\n  --cc-brand-400: #6cc471;\n  --cc-brand-500: #4caf50;\n  --cc-brand-600: #36954d;\n  --cc-brand-700: #28773d;\n  --cc-brand-800: #1e5e31;\n  --cc-brand-900: #174825;\n  --cc-brand-950: #092913;\n\n  /* Ink (Text = ink-900) */\n  --cc-ink-50:  #f8fbfb;\n  --cc-ink-100: #f0f5f6;\n  --cc-ink-200: #e0e7e8;\n  --cc-ink-300: #ced6d7;\n  --cc-ink-400: #99a3a5;\n  --cc-ink-500: #626e71;\n  --cc-ink-600: #4d595c;\n  --cc-ink-700: #3b484a;\n  --cc-ink-800: #2d393b;\n  --cc-ink-900: #232e30;\n  --cc-ink-950: #101819;\n\n  /* Ampel (Fuellung / Text) */\n  --cc-urgent:      #ff3b30;\n  --cc-urgent-text: #c4170e;\n  --cc-pending:      #ff9500;\n  --cc-pending-text: #9a5200;\n  --cc-ok:      #34c759;\n  --cc-ok-text: #1a6e2e;\n\n  /* Bewegung (prefers-reduced-motion schaltet sie in shell.css ab) */\n  --cc-dauer-kurz:   120ms;\n  --cc-dauer-mittel: 180ms;\n  --cc-dauer-lang:   260ms;\n  --cc-ease-out: cubic-bezier(0.16, 1, 0.3, 1);\n\n  /* Muster (belegt) */\n  --cc-karte-radius:   1rem;\n  --cc-karte-flaeche:  #ffffff;\n  --cc-karte-rahmen:   inset 0 0 0 1px var(--cc-ink-200);\n  --cc-nav-radius:     0.75rem;\n  --cc-fokus-breite:   2px;\n  --cc-fokus-farbe:    var(--cc-brand-600);\n  --cc-fokus-abstand:  2px;\n  --cc-touch-min:      44px;\n  --cc-popover-schatten: 0 20px 50px -20px rgba(0, 0, 0, 0.35);\n\n  /* ---- PLATZHALTER - aus Estate-Quelle uebernehmen (Estate hat keine Seitenleiste) ---- */\n  --cc-shell-breite: 248px;     /* PLATZHALTER - aus Estate-Quelle uebernehmen */\n  --cc-shell-abstand: 16px;     /* PLATZHALTER - aus Estate-Quelle uebernehmen */\n  --cc-shell-mobil-bar: 52px;   /* PLATZHALTER - aus Estate-Quelle uebernehmen */\n  /* Icon-Satz: bis zur Estate-Quelle schlichte Strich-SVGs (siehe shell.js). */\n}\n\n/* ============================================================================\n   Shell-Layout (S1) der Compliance-Plattform. Nutzt die Estate-Tokens aus\n   estate-tokens.css. Wird vom Build (apps/web/build.mjs -> baueShellJs) als\n   String in dist/shell.js eingebettet und zur Laufzeit als <style id=\"ccShellStil\">\n   eingespielt (der Dev-Server kennt .css nicht, darum kein .css-Artefakt).\n\n   Minimal-invasiv: die Shell legt sich NEBEN die bestehende App. Werte, die in\n   der Estate-Quelle nicht belegt sind (Seitenleisten-Breite, Abstaende, Mobil-\n   Muster), kommen aus den PLATZHALTER-Variablen in estate-tokens.css.\n   ============================================================================ */\n\n/* Die Shell ist standardmaessig unsichtbar; erst body.cc-shell-an zeigt sie. */\n.cc-shell { display: none; }\n.cc-shell-modul-wrap { display: none; }\n\n/* ---------------------------------------------------------------- Desktop -- */\nbody.cc-shell-an .cc-shell { display: flex; }\n\n/* Inhalt der bestehenden App nach rechts schieben, damit die feste Leiste\n   nichts verdeckt (\"nichts abgeschnitten\"). Nur ab Tablet-Breite. */\n@media (min-width: 768px) {\n  body.cc-shell-an { padding-left: var(--cc-shell-breite); }\n}\n\n/* Seitenleiste */\n.cc-shell {\n  position: fixed;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  width: var(--cc-shell-breite);\n  flex-direction: column;\n  gap: 4px;\n  box-sizing: border-box;\n  padding: calc(var(--cc-shell-abstand) + 28px) 12px var(--cc-shell-abstand);\n  background: var(--cc-karte-flaeche);\n  box-shadow: inset -1px 0 0 0 var(--cc-ink-200);\n  font-family: var(--cc-font);\n  color: var(--cc-ink-900);\n  z-index: 9000;                 /* ueber App-Inhalt, unter App-Modals (10001+) und Banner (99999) */\n  overflow-y: auto;\n}\n\n.cc-shell-marke {\n  display: flex;\n  align-items: center;\n  gap: 10px;\n  padding: 6px 10px 14px;\n  font-weight: 700;\n  font-size: 15px;\n  letter-spacing: .2px;\n  color: var(--cc-ink-900);\n}\n.cc-shell-marke .cc-shell-punkt {\n  width: 10px; height: 10px; border-radius: 50%;\n  background: var(--cc-brand-500);\n  box-shadow: 0 0 0 4px var(--cc-brand-100);\n  flex: 0 0 auto;\n}\n\n.cc-shell-nav { display: flex; flex-direction: column; gap: 2px; }\n\n/* Nav-Eintrag */\n.cc-nav-eintrag {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  width: 100%;\n  min-height: var(--cc-touch-min);\n  padding: 9px 12px;\n  border: 0;\n  border-radius: var(--cc-nav-radius);\n  background: transparent;\n  color: var(--cc-ink-700);\n  font-family: var(--cc-font);\n  font-size: 14px;\n  font-weight: 500;\n  text-align: left;\n  cursor: pointer;\n  transition: background-color var(--cc-dauer-kurz) var(--cc-ease-out),\n              color var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-nav-eintrag svg { width: 20px; height: 20px; flex: 0 0 auto; }\n.cc-nav-eintrag:hover { background: var(--cc-ink-100); color: var(--cc-ink-900); }\n.cc-nav-eintrag[aria-current=\"page\"] {\n  background: var(--cc-brand-50);\n  color: var(--cc-brand-800);\n  font-weight: 600;\n}\n.cc-nav-eintrag:focus-visible {\n  outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe);\n  outline-offset: var(--cc-fokus-abstand);\n}\n.cc-nav-eintrag.cc-gesperrt { color: var(--cc-ink-400); }\n\n/* Leerzustand-/Hinweis-Flaeche (rechts neben der Leiste) */\nbody.cc-shell-an .cc-shell-modul-wrap[data-cc-sichtbar=\"1\"] { display: block; }\n.cc-shell-modul-wrap {\n  position: fixed;\n  top: 0; right: 0; bottom: 0;\n  left: 0;\n  z-index: 8000;              /* unter der Leiste (9000), damit die Nav klickbar bleibt */\n  background: var(--cc-scene);\n  overflow-y: auto;\n  font-family: var(--cc-font);\n  color: var(--cc-ink-900);\n}\n@media (min-width: 768px) {\n  .cc-shell-modul-wrap { left: var(--cc-shell-breite); }\n}\n\n.cc-leer {\n  max-width: 460px;\n  margin: 14vh auto 0;\n  padding: 40px 28px;\n  text-align: center;\n}\n.cc-leer-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 64px; height: 64px;\n  margin-bottom: 20px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  color: var(--cc-brand-600);\n}\n.cc-leer-icon svg { width: 30px; height: 30px; }\n.cc-leer-titel { margin: 0 0 8px; font-size: 20px; font-weight: 700; color: var(--cc-ink-900); }\n.cc-leer-satz { margin: 0 0 6px; font-size: 14px; line-height: 1.5; color: var(--cc-ink-600); }\n.cc-leer-bald {\n  display: inline-block;\n  margin-top: 14px;\n  padding: 5px 12px;\n  border-radius: 999px;\n  background: var(--cc-brand-50);\n  color: var(--cc-brand-800);\n  font-size: 12px;\n  font-weight: 600;\n}\n.cc-leer-hinweis {\n  margin-top: 18px;\n  font-size: 13px;\n  color: var(--cc-pending-text);\n}\n\n/* Primaer-Knopf (fuer \"Bisherige Ansicht oeffnen\", falls eine Funktion existiert) */\n.cc-knopf {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  min-height: var(--cc-touch-min);\n  margin-top: 18px;\n  padding: 10px 18px;\n  border: 0;\n  border-radius: 999px;\n  background: var(--cc-brand-700);\n  color: #ffffff;\n  font-family: var(--cc-font);\n  font-size: 14px;\n  font-weight: 600;\n  cursor: pointer;\n  transition: background-color var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-knopf:hover { background: var(--cc-brand-800); }\n.cc-knopf:focus-visible {\n  outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe);\n  outline-offset: var(--cc-fokus-abstand);\n}\n\n/* ----------------------------------------------------------------- Mobil -- */\n/* PLATZHALTER-Muster: unter 768px klappt die Leiste ein; ein Balken mit\n   Umschalter oben. Estate hat keine Seitenleiste -> spaeter gegenpruefen. */\n.cc-shell-balken { display: none; }\n@media (max-width: 767.98px) {\n  body.cc-shell-an .cc-shell-balken {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    position: fixed;\n    top: 0; left: 0; right: 0;\n    height: var(--cc-shell-mobil-bar);\n    padding: 0 12px;\n    background: var(--cc-karte-flaeche);\n    box-shadow: inset 0 -1px 0 0 var(--cc-ink-200);\n    font-family: var(--cc-font);\n    z-index: 9001;\n  }\n  body.cc-shell-an { padding-top: var(--cc-shell-mobil-bar); }\n  .cc-shell {\n    top: var(--cc-shell-mobil-bar);\n    width: min(84vw, var(--cc-shell-breite));\n    transform: translateX(-102%);\n    transition: transform var(--cc-dauer-mittel) var(--cc-ease-out);\n    box-shadow: var(--cc-popover-schatten);\n  }\n  body.cc-shell-auf .cc-shell { transform: translateX(0); }\n  .cc-shell-modul-wrap { top: var(--cc-shell-mobil-bar); }\n}\n.cc-shell-umschalter {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: var(--cc-touch-min);\n  height: var(--cc-touch-min);\n  border: 0;\n  border-radius: var(--cc-nav-radius);\n  background: transparent;\n  color: var(--cc-ink-800);\n  cursor: pointer;\n}\n.cc-shell-umschalter:focus-visible {\n  outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe);\n  outline-offset: var(--cc-fokus-abstand);\n}\n.cc-shell-balken-titel { font-weight: 700; font-size: 15px; color: var(--cc-ink-900); }\n\n/* Bewegung aus, wenn der Nutzer das will. */\n@media (prefers-reduced-motion: reduce) {\n  .cc-nav-eintrag, .cc-knopf, .cc-shell { transition: none; }\n}\n\n/* ------------------------------------------- S2 Geschäftspartner + Akte -- */\n/* Von der Shell selbst gerenderte Inhalte im .cc-shell-modul-wrap. Estate-Tokens,\n   kein neues Design: weisse Karten, Ampel aus --cc-ok/-pending/-urgent. */\n.cc-partner, .cc-akte {\n  max-width: 880px;\n  margin: 0 auto;\n  padding: clamp(18px, 4vw, 36px) clamp(14px, 4vw, 28px) 48px;\n  box-sizing: border-box;\n}\n.cc-partner-kopf {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 16px;\n  flex-wrap: wrap;\n  margin-bottom: 18px;\n}\n.cc-partner-titel { margin: 0; font-size: 22px; font-weight: 700; color: var(--cc-ink-900); }\n.cc-partner-unter { margin: 4px 0 0; font-size: 13px; color: var(--cc-ink-500); }\n\n.cc-partner-such { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }\n.cc-such-feld {\n  flex: 1 1 220px;\n  min-height: var(--cc-touch-min);\n  padding: 9px 14px;\n  border: 0;\n  border-radius: 999px;\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-family: var(--cc-font);\n  font-size: 14px;\n  color: var(--cc-ink-900);\n}\n.cc-such-feld:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-ampel-filter { display: flex; flex-wrap: wrap; gap: 6px; }\n.cc-chip {\n  min-height: 36px;\n  padding: 6px 14px;\n  border: 0;\n  border-radius: 999px;\n  background: var(--cc-ink-100);\n  color: var(--cc-ink-700);\n  font-family: var(--cc-font);\n  font-size: 13px;\n  font-weight: 600;\n  cursor: pointer;\n}\n.cc-chip:hover { background: var(--cc-ink-200); }\n.cc-chip-an { background: var(--cc-brand-700); color: #ffffff; }\n.cc-chip:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n\n.cc-partner-liste { display: flex; flex-direction: column; gap: 10px; }\n.cc-partner-zeile {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 14px;\n  width: 100%;\n  min-height: var(--cc-touch-min);\n  padding: 14px 18px;\n  border: 0;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-family: var(--cc-font);\n  text-align: left;\n  cursor: pointer;\n  transition: box-shadow var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-partner-zeile:hover { box-shadow: var(--cc-karte-rahmen), 0 6px 20px -12px rgba(0, 0, 0, 0.3); }\n.cc-partner-zeile:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-pz-links { min-width: 0; }\n.cc-pz-name { font-size: 15px; font-weight: 600; color: var(--cc-ink-900); overflow-wrap: anywhere; }\n.cc-pz-meta { margin-top: 4px; font-size: 12.5px; color: var(--cc-ink-500); display: flex; flex-wrap: wrap; gap: 6px; }\n.cc-pz-sep { opacity: .5; }\n.cc-partner-keine { margin: 10px 2px; font-size: 13px; color: var(--cc-ink-500); }\n\n/* Ampel-Pille */\n.cc-ampel {\n  display: inline-flex;\n  align-items: center;\n  gap: 7px;\n  flex: 0 0 auto;\n  padding: 5px 12px 5px 10px;\n  border-radius: 999px;\n  font-size: 14px;\n  font-weight: 700;\n  font-variant-numeric: tabular-nums;\n}\n.cc-ampel-punkt { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }\n.cc-ampel-ok      { background: rgba(52, 199, 89, 0.14);  color: var(--cc-ok-text); }\n.cc-ampel-ok      .cc-ampel-punkt { background: var(--cc-ok); }\n.cc-ampel-pending { background: rgba(255, 149, 0, 0.16);  color: var(--cc-pending-text); }\n.cc-ampel-pending .cc-ampel-punkt { background: var(--cc-pending); }\n.cc-ampel-urgent  { background: rgba(255, 59, 48, 0.14);  color: var(--cc-urgent-text); }\n.cc-ampel-urgent  .cc-ampel-punkt { background: var(--cc-urgent); }\n.cc-ampel-grau    { background: var(--cc-ink-100); color: var(--cc-ink-500); }\n.cc-ampel-grau    .cc-ampel-punkt { background: var(--cc-ink-400); }\n\n/* Platzhalter-Markierung */\n.cc-platzhalter {\n  display: inline-block;\n  padding: 2px 8px;\n  border-radius: 6px;\n  background: rgba(255, 149, 0, 0.12);\n  color: var(--cc-pending-text);\n  font-size: 12px;\n  font-weight: 600;\n}\n\n/* Knopf-Varianten */\n.cc-knopf-leise { background: var(--cc-ink-100); color: var(--cc-ink-800); margin-top: 0; }\n.cc-knopf-leise:hover { background: var(--cc-ink-200); }\n\n/* ---- Akte ---- */\n.cc-akte-kopf { margin-bottom: 10px; }\n.cc-akte-zurueck {\n  display: inline-flex;\n  align-items: center;\n  min-height: 40px;\n  padding: 6px 14px 6px 10px;\n  border: 0;\n  border-radius: 999px;\n  background: transparent;\n  color: var(--cc-brand-800);\n  font-family: var(--cc-font);\n  font-size: 14px;\n  font-weight: 600;\n  cursor: pointer;\n}\n.cc-akte-zurueck:hover { background: var(--cc-brand-50); }\n.cc-akte-zurueck:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-akte-titelzeile { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 4px 2px 18px; flex-wrap: wrap; }\n.cc-akte-name { margin: 0; font-size: 22px; font-weight: 700; color: var(--cc-ink-900); overflow-wrap: anywhere; }\n\n.cc-karte {\n  margin-bottom: 14px;\n  padding: 18px 20px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n}\n.cc-karte-titel { margin: 0 0 12px; font-size: 13px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--cc-ink-500); }\n\n.cc-stamm-zeile { display: flex; justify-content: space-between; gap: 14px; padding: 8px 0; border-top: 1px solid var(--cc-ink-100); }\n.cc-akte-stamm .cc-stamm-zeile:first-of-type { border-top: 0; }\n.cc-stamm-label { font-size: 13px; color: var(--cc-ink-500); }\n.cc-stamm-wert { font-size: 14px; font-weight: 600; color: var(--cc-ink-900); text-align: right; overflow-wrap: anywhere; }\n\n/* Score-Verlauf (SVG-Balken; Farbe per fill, keine inline styles) */\n.cc-verlauf { overflow-x: auto; }\n.cc-verlauf-svg { display: block; max-width: 100%; height: 120px; }\n.cc-verlauf-bar.cc-ampel-ok { fill: var(--cc-ok); }\n.cc-verlauf-bar.cc-ampel-pending { fill: var(--cc-pending); }\n.cc-verlauf-bar.cc-ampel-urgent { fill: var(--cc-urgent); }\n.cc-verlauf-bar.cc-ampel-grau { fill: var(--cc-ink-300); }\n.cc-verlauf-zahl { fill: var(--cc-ink-600); font-size: 12px; font-weight: 600; font-family: var(--cc-font); }\n\n/* Von der Shell per Klasse aus-/eingeblendet (statt inline-Stil) */\n.cc-aus { display: none !important; }\n\n/* S2: schwebender Knopf „Zur Akte dieses Geschäftspartners\" (nur bei aktivem #report) */\n.cc-zur-akte {\n  position: fixed;\n  right: 20px;\n  bottom: 20px;\n  z-index: 9500;                 /* über App-Inhalt, unter App-Modals (10001+) */\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  min-height: var(--cc-touch-min);\n  padding: 11px 18px;\n  border: 0;\n  border-radius: 999px;\n  background: var(--cc-brand-700);\n  color: #ffffff;\n  font-family: var(--cc-font);\n  font-size: 14px;\n  font-weight: 600;\n  cursor: pointer;\n  box-shadow: var(--cc-popover-schatten);\n}\n.cc-zur-akte svg { width: 18px; height: 18px; flex: 0 0 auto; }\n.cc-zur-akte:hover { background: var(--cc-brand-800); }\n.cc-zur-akte:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n@media (min-width: 768px) { body.cc-shell-an .cc-zur-akte { right: 24px; bottom: 24px; } }\n\n/* Prüfhistorie */\n.cc-hist-liste { display: flex; flex-direction: column; }\n.cc-hist-zeile { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-top: 1px solid var(--cc-ink-100); }\n.cc-hist-liste .cc-hist-zeile:first-child { border-top: 0; }\n.cc-hist-datum { flex: 0 0 96px; font-size: 13px; font-weight: 600; color: var(--cc-ink-800); font-variant-numeric: tabular-nums; }\n.cc-hist-pid { flex: 1 1 auto; text-align: right; font-size: 12.5px; color: var(--cc-ink-500); overflow-wrap: anywhere; }\n\n.cc-akte-aktion { margin-top: 8px; }\n\n/* ------------------------------------------------- Vorschau (nur test) -- */\n/* NUR additiv unter body.cc-shell-vorschau (gesetzt von shell.js, wenn\n   APP_ENV === 'test' UND der Vorschau-Schalter in der Adresse steht). Ohne\n   Login liegt sonst das Login-Gate (z-index 9999) ueber der Shell und man\n   sieht nur die Maske. Hier heben wir Leiste, Inhalt und Mobil-Balken auf\n   EINEN gemeinsamen Wert (--cc-z-vorschau = 10000): ueber das Login-Gate\n   (9999), aber unter den App-Modals/Knoepfen (10001+) und dem Testbanner\n   (99999). Die Reihenfolge Leiste > Inhalt kommt aus der DOM-Reihenfolge\n   (nav wird in shell.js NACH dem Inhalt angehaengt), nicht aus hoeheren Zahlen.\n   Das Start-Gate (10000) liegt im DOM vor der Shell und wird darum von ihr\n   ueberdeckt. Das ausgeklappte Mobil-Menue ist dieselbe .cc-shell und erbt den\n   Wert. Die Normal-Ansicht (9000/8000/9001) bleibt unberuehrt. */\nbody.cc-shell-vorschau { --cc-z-vorschau: 10000; }\nbody.cc-shell-vorschau .cc-shell { z-index: var(--cc-z-vorschau); }\nbody.cc-shell-vorschau .cc-shell-modul-wrap { z-index: var(--cc-z-vorschau); }\nbody.cc-shell-vorschau .cc-shell-balken { z-index: var(--cc-z-vorschau); }\n\n/* ---------------------------------------------------- S3 Dashboard (additiv) -- */\n/* NUR neue .cc-dash-*-Regeln; bestehende Regeln + alle z-index-Werte unveraendert (shell-vorschau C2).\n   Design folgt Estate (ruhige weisse Karten, vorhandene Tokens, Ampel aus den .cc-ampel-*-Regeln oben);\n   Struktur vor Optik. Kein neues z-index, keine neue Farbe ausserhalb der Tokens. Grundlayout bleibt\n   Claude-/ChatGPT-Stil (Leiste links, Inhalt hier rechts im #ccShellModul). */\n.cc-dash {\n  max-width: 880px;\n  margin: 0 auto;\n  padding: clamp(18px, 4vw, 36px) clamp(14px, 4vw, 28px) 56px;\n  box-sizing: border-box;\n}\n.cc-dash-kopf { margin-bottom: 20px; }\n.cc-dash-titel { margin: 0; font-size: 22px; font-weight: 700; color: var(--cc-ink-900); }\n.cc-dash-unter { margin: 4px 0 0; font-size: 13px; color: var(--cc-ink-500); }\n\n.cc-dash-bereich { margin-bottom: 22px; }\n.cc-dash-bereich-titel {\n  margin: 0 0 12px;\n  font-size: 13px;\n  font-weight: 700;\n  letter-spacing: .4px;\n  text-transform: uppercase;\n  color: var(--cc-ink-500);\n}\n\n/* Bereich 1: Handlungsbedarf – Ampel NUR hier. */\n.cc-dash-bedarf-liste { display: flex; flex-direction: column; gap: 10px; }\n.cc-dash-bedarf-zeile {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 14px;\n  width: 100%;\n  min-height: var(--cc-touch-min);\n  padding: 14px 18px;\n  border: 0;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-family: var(--cc-font);\n  text-align: left;\n  cursor: pointer;\n  transition: box-shadow var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-dash-bedarf-zeile:hover { box-shadow: var(--cc-karte-rahmen), 0 6px 20px -12px rgba(0, 0, 0, 0.3); }\n.cc-dash-bedarf-zeile:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-dash-bz-links { min-width: 0; }\n.cc-dash-bz-name { font-size: 15px; font-weight: 600; color: var(--cc-ink-900); overflow-wrap: anywhere; }\n.cc-dash-bz-meta { margin-top: 4px; font-size: 12.5px; color: var(--cc-ink-500); }\n/* Leer-Fall: ruhiger Satz OHNE Ampelfarbe. */\n.cc-dash-ruhig {\n  margin: 0;\n  padding: 16px 18px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-size: 14px;\n  color: var(--cc-ink-600);\n}\n\n/* Bereich 2: Tages-Briefing. */\n.cc-dash-briefing {\n  padding: 18px 20px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n}\n.cc-dash-briefing .cc-dash-bereich-titel { margin-bottom: 14px; }\n.cc-dash-kennzahlen {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));\n  gap: 12px;\n}\n.cc-dash-kennzahl {\n  padding: 12px 14px;\n  border-radius: var(--cc-nav-radius);\n  background: var(--cc-scene);\n}\n.cc-dash-kz-zahl { font-size: 24px; font-weight: 700; color: var(--cc-ink-900); font-variant-numeric: tabular-nums; }\n.cc-dash-kz-text { margin-top: 2px; font-size: 12.5px; color: var(--cc-ink-500); }\n.cc-dash-letzte { margin: 14px 0 0; font-size: 13px; color: var(--cc-ink-600); }\n.cc-dash-letzte-label { color: var(--cc-ink-500); }\n.cc-dash-letzte-firma { font-weight: 600; color: var(--cc-ink-800); overflow-wrap: anywhere; }\n\n/* Bereich 3: Bereiche wie Estate – ruhige Karten. */\n.cc-dash-abteilungen {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n  gap: 12px;\n}\n.cc-dash-karte {\n  display: flex;\n  flex-direction: column;\n  align-items: flex-start;\n  gap: 8px;\n  min-height: var(--cc-touch-min);\n  padding: 16px 18px;\n  border: 0;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n  font-family: var(--cc-font);\n  text-align: left;\n  cursor: pointer;\n  transition: box-shadow var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-dash-karte:hover { box-shadow: var(--cc-karte-rahmen), 0 6px 20px -12px rgba(0, 0, 0, 0.3); }\n.cc-dash-karte:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-dash-karte-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 40px; height: 40px;\n  border-radius: var(--cc-nav-radius);\n  background: var(--cc-brand-50);\n  color: var(--cc-brand-700);\n}\n.cc-dash-karte-icon svg { width: 22px; height: 22px; }\n.cc-dash-karte-titel { font-size: 15px; font-weight: 600; color: var(--cc-ink-900); }\n.cc-dash-karte-satz { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--cc-ink-500); }\n\n/* KI-Platz: zentrale Flaeche, nur Markierung (ab S4 der Assistent). */\n.cc-dash-ki {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  text-align: center;\n  gap: 12px;\n  margin-top: 6px;\n  padding: 32px 24px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-brand-50);\n  box-shadow: inset 0 0 0 1px var(--cc-brand-100);\n}\n.cc-dash-ki-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  width: 56px; height: 56px;\n  border-radius: 50%;\n  background: var(--cc-karte-flaeche);\n  color: var(--cc-brand-600);\n  box-shadow: var(--cc-karte-rahmen);\n}\n.cc-dash-ki-icon svg { width: 30px; height: 30px; }\n.cc-dash-ki-satz { margin: 0; max-width: 420px; font-size: 14px; line-height: 1.5; color: var(--cc-brand-900); }\n\n/* ==========================================================================\n   S4a KI-Assistent + Tour – NUR neue .cc-ki-*/.cc-tour-*-Regeln (additiv). Bestehende Regeln,\n   alle z-index-Werte und estate-tokens.css bleiben byte-gleich (shell-vorschau C2). Die Tour fuehrt\n   KEIN neues z-index ein: die Tour-Karte haengt an der Leiste und erbt deren Ebene; das Ziel wird nur\n   per outline umrandet. Nur vorhandene Tokens, Struktur vor Optik.\n   ========================================================================== */\n.cc-ki-feld {\n  display: flex;\n  flex-direction: column;\n  gap: 12px;\n  padding: 20px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-karte-rahmen);\n}\n.cc-ki-titel { margin: 0; font-size: 16px; font-weight: 600; color: var(--cc-ink-900); }\n.cc-ki-unter { margin: 0; font-size: 13px; line-height: 1.5; color: var(--cc-ink-500); }\n.cc-ki-log {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  max-height: 240px;\n  overflow-y: auto;\n  padding: 4px;\n}\n.cc-ki-feld-gross .cc-ki-log { max-height: 420px; }\n.cc-ki-msg { display: flex; }\n.cc-ki-msg-nutzer { justify-content: flex-end; }\n.cc-ki-msg-assistent { justify-content: flex-start; }\n.cc-ki-blase {\n  max-width: 85%;\n  padding: 8px 12px;\n  border-radius: var(--cc-nav-radius);\n  font-size: 14px;\n  line-height: 1.5;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n.cc-ki-msg-nutzer .cc-ki-blase { background: var(--cc-brand-600); color: #ffffff; }\n.cc-ki-msg-assistent .cc-ki-blase { background: var(--cc-ink-100); color: var(--cc-ink-900); }\n.cc-ki-eingabe { display: flex; gap: 8px; }\n.cc-ki-input {\n  flex: 1 1 auto;\n  min-height: var(--cc-touch-min);\n  padding: 10px 14px;\n  font: inherit;\n  font-size: 14px;\n  color: var(--cc-ink-900);\n  border: none;\n  border-radius: var(--cc-nav-radius);\n  box-shadow: var(--cc-karte-rahmen);\n  background: var(--cc-ink-50);\n}\n.cc-ki-input:focus-visible { outline: var(--cc-fokus-breite) solid var(--cc-fokus-farbe); outline-offset: var(--cc-fokus-abstand); }\n.cc-ki-senden {\n  flex: 0 0 auto;\n  min-height: var(--cc-touch-min);\n  padding: 0 18px;\n  font: inherit;\n  font-size: 14px;\n  font-weight: 600;\n  color: #ffffff;\n  background: var(--cc-brand-600);\n  border: none;\n  border-radius: var(--cc-nav-radius);\n  cursor: pointer;\n  transition: background var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-ki-senden:hover { background: var(--cc-brand-700); }\n.cc-ki-chips { display: flex; flex-wrap: wrap; gap: 8px; }\n.cc-ki-chip {\n  padding: 6px 12px;\n  font: inherit;\n  font-size: 13px;\n  color: var(--cc-brand-800);\n  background: var(--cc-brand-50);\n  border: none;\n  border-radius: 999px;\n  box-shadow: inset 0 0 0 1px var(--cc-brand-100);\n  cursor: pointer;\n  transition: background var(--cc-dauer-kurz) var(--cc-ease-out);\n}\n.cc-ki-chip:hover { background: var(--cc-brand-100); }\n.cc-ki-karte {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  padding: 14px 16px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-pending);\n  background: color-mix(in srgb, var(--cc-pending) 14%, var(--cc-karte-flaeche));\n  box-shadow: inset 0 0 0 1px var(--cc-pending);\n}\n.cc-ki-karte-aus { display: none; }\n.cc-ki-karte-titel { font-size: 15px; font-weight: 600; color: var(--cc-pending-text); }\n.cc-ki-karte-liste { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.6; color: var(--cc-ink-800); }\n.cc-ki-karte-knoepfe { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }\n\n/* Tour: Karte an der Leiste (erbt deren Ebene; KEIN eigenes z-index). Fixe Lage unten mittig. */\n.cc-tour {\n  position: fixed;\n  left: 50%;\n  bottom: 24px;\n  transform: translateX(-50%);\n  width: min(360px, calc(100vw - 32px));\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  padding: 18px 20px;\n  border-radius: var(--cc-karte-radius);\n  background: var(--cc-karte-flaeche);\n  box-shadow: var(--cc-popover-schatten), var(--cc-karte-rahmen);\n}\n.cc-tour-schritt { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cc-brand-600); }\n.cc-tour-titel { font-size: 16px; font-weight: 600; color: var(--cc-ink-900); }\n.cc-tour-text { margin: 0; font-size: 14px; line-height: 1.5; color: var(--cc-ink-600); }\n.cc-tour-knoepfe { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }\n.cc-tour-weiter { margin-left: auto; }\n/* Hervorhebung des Ziel-Elements – nur Umrandung, kein Stapel-Eingriff. */\n.cc-tour-ziel { outline: 3px solid var(--cc-brand-500); outline-offset: 3px; border-radius: 4px; }\n";
   var VORSCHAU = (typeof window !== 'undefined' && !!window.location && window.location.search.indexOf('vorschau=shell') >= 0);
   var VORSCHAU_DATEN = [{"id":"vs1","pruef_id":"VS-1003","firmenname":"Nordlicht Handels GmbH (Fantasie)","land":"DE","ust_id":"DE900000001","score":84,"verdict":"ok","created_at":"2026-11-17T10:12:00Z","report_json":{"_email":"kontakt@nordlicht.example.invalid"}},{"id":"vs2","pruef_id":"VS-1002","firmenname":"Nordlicht Handels GmbH (Fantasie)","land":"DE","ust_id":"DE900000001","score":67,"verdict":"warn","created_at":"2026-08-04T10:12:00Z","report_json":{"_email":"kontakt@nordlicht.example.invalid"}},{"id":"vs3","pruef_id":"VS-1001","firmenname":"Alpenquell Mineral AG (Fantasie)","land":"AT","ust_id":"ATU90000001","score":52,"verdict":"warn","created_at":"2026-11-09T09:30:00Z","report_json":{"_email":"info@alpenquell.example.invalid"}},{"id":"vs4","pruef_id":"VS-1000","firmenname":"Mistral Trading Ltd (Fantasie)","land":"FR","ust_id":null,"score":38,"verdict":"bad","created_at":"2026-10-21T14:05:00Z","report_json":{"_email":"bonjour@mistral.example.invalid"}}];
 
@@ -56,8 +56,11 @@
   //                      frisch). Die Shell schreibt nichts; "Bisherige Ansicht"/PDF gehen per .click()
   //                      auf #historyBtn. Vorschau nutzt statt der Bruecke die Fantasie-Daten (nur test).
   //   art 'dashboard' -> S3: von der Shell SELBST gerendertes Dashboard (Handlungsbedarf, Tages-Briefing,
-  //                      Bereiche, KI-Platz). Daten nur lesend ueber brueckeZeilen(); klickt #historyBtn
+  //                      Bereiche, Assistent oben). Daten nur lesend ueber brueckeZeilen(); klickt #historyBtn
   //                      NICHT und schreibt nie in den App-State.
+  //   art 'ki'        -> S4a: von der Shell SELBST gerenderte Assistenz-Ansicht (dasselbe Feld wie oben im
+  //                      Dashboard, als eigene Ansicht). Bedient die App ueber KI_AKTIONEN, schreibt nur
+  //                      nach Bestaetigungskarte (Formular vorausfuellen), sonst nur lesen/navigieren.
   //   start:true      -> Startmodul (wird beim Erscheinen aktiv, ohne zu klicken). S3 (Zeus): Start = dashboard.
   var MODULE = [
     { id: 'dashboard', label: 'Dashboard', icon: ICON.dashboard, art: 'dashboard', start: true },
@@ -66,8 +69,7 @@
       ziel: '.app header.header .logo-wrap', zielName: 'Neue Prüfung' },
     { id: 'monitoring', label: 'Monitoring', icon: ICON.monitoring, art: 'leer', bald: 'S7',
       satz: 'Die laufende Überwachung deiner Partner bekommt hier einen eigenen Platz.' },
-    { id: 'ki', label: 'KI-Assistent', icon: ICON.ki, art: 'leer', bald: 'S4',
-      satz: 'Ein Assistent, der dir bei Prüfungen und Fragen hilft, folgt hier.' },
+    { id: 'ki', label: 'KI-Assistent', icon: ICON.ki, art: 'ki' },
     { id: 'berichte', label: 'Berichte & Audit', icon: ICON.berichte, art: 'leer', bald: 'S5',
       satz: 'Berichte und ein nachvollziehbares Prüfprotokoll findest du später hier.' },
     { id: 'team', label: 'Team', icon: ICON.team, art: 'verbunden',
@@ -269,6 +271,246 @@
       ohneScoreAnzahl: ohneScore,
       letztePruefung: letzte
     };
+  }
+
+  // ==========================================================================
+  // S4a KI-Assistent – REINE Schicht (kein DOM, kein Netz, keine echte KI).
+  // kiVerstehe(text) deutet Deutsch (robust gegen Gross/Klein, Umlaute/ae, Satzzeichen)
+  // in genau eine Aktion aus KI_AKTIONEN oder in eine ehrliche Antwort. Die Ausfuehrer
+  // (KI_AKTIONEN[*].ausfuehren) sind vom DOM getrennt: sie arbeiten nur ueber die
+  // injizierte 'umgebung' (daten/gruppen/navigiere/zeigeAkte/fuelleFormular/starteTour),
+  // damit der Test sie rein pruefen kann. Zahlen kommen NUR aus dashboardDaten (ueber
+  // umgebung.daten()), nie erfunden. 'schreiben'-Aktionen laufen NIE sofort – erst nach
+  // einer Bestaetigungskarte (kiBestaetige), Abbrechen verwirft (kiAbbrechen).
+  // ==========================================================================
+  var KI_MAX_ZEICHEN = 500;   // Punkt 6: Eingabe max. 500 Zeichen.
+
+  // Sprach-Normalisierung fuer das Erkennen (nur zum Matchen; der Original-Text bleibt fuer Namen erhalten).
+  function kiNorm(text) {
+    return String(text == null ? '' : text).toLowerCase()
+      .replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss')
+      .replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+
+  // Bekannte Laendernamen (nur Sprachwortschatz fuers Parsen, KEINE Daten-Literale) – normalisiert (ae-Form).
+  var KI_LAENDER = ['deutschland', 'oesterreich', 'frankreich', 'italien', 'spanien', 'schweiz',
+    'niederlande', 'belgien', 'luxemburg', 'polen', 'portugal', 'daenemark', 'schweden', 'norwegen',
+    'finnland', 'irland', 'tschechien', 'ungarn', 'griechenland', 'slowakei', 'slowenien', 'kroatien'];
+
+  // Einen Firmennamen aus Nutzertext saeubern (fuehrender Artikel/Fuellwort, Satzzeichen, Schluss-Fuellwort weg).
+  function kiNameSaeubern(s) {
+    var t = String(s == null ? '' : s).replace(/["„“”'`.?!,:;()]+/g, ' ').replace(/\s+/g, ' ').trim();
+    t = t.replace(/^(die|der|das|den|dem|des|von|vom|für|fuer|firma)\s+/i, '');
+    t = t.replace(/\s+(bitte|oeffnen|öffnen|anzeigen|zeigen|auf|jetzt|vor)$/i, '');
+    return t.trim();
+  }
+
+  // Partnername aus „öffne Akte von X" / „Akte X" / „zeig X" ziehen (Original-Text, Gross/Klein bleibt).
+  function kiPartnerName(roh) {
+    var t = String(roh == null ? '' : roh).trim();
+    var m = /akte\s+(?:von\s+|des\s+|der\s+|für\s+|fuer\s+)?(.+)$/i.exec(t);
+    if (m) return kiNameSaeubern(m[1]);
+    m = /partner\s+(?:von\s+)?(.+)$/i.exec(t);
+    if (m) return kiNameSaeubern(m[1]);
+    m = /(?:oeffne|öffne|zeige?|zeig mir)\s+(.+)$/i.exec(t);
+    if (m) return kiNameSaeubern(m[1]);
+    return '';
+  }
+
+  // Firma + (optional) Land aus „… vorbereiten für <Firma> in <Land>" ziehen.
+  function kiFirmaLand(roh) {
+    var t = String(roh == null ? '' : roh).trim();
+    var rest = '';
+    var m = /(?:für|fuer)\s+(.+)$/i.exec(t);
+    if (m) rest = m[1];
+    else { m = /(?:vorbereiten|vorbereite|vorzubereiten|ausfuellen|ausfüllen|vorausfuellen)\s+(.+)$/i.exec(t); if (m) rest = m[1]; }
+    rest = rest.replace(/["„“”'`.?!,:;()]+/g, ' ').replace(/\s+/g, ' ').trim();
+    rest = rest.replace(/\s+(vor|vorbereiten|vorbereite|bitte)$/i, '').trim();
+    if (!rest) return { firma: '', land: null };
+    var firma = rest, land = null;
+    var mi = /^(.*\S)\s+(?:in|aus)\s+(\S.*)$/i.exec(rest);
+    if (mi) { firma = mi[1].trim(); land = mi[2].trim(); }
+    else {
+      var worte = rest.split(' ');
+      var letzte = worte[worte.length - 1];
+      if (worte.length > 1 && KI_LAENDER.indexOf(kiNorm(letzte)) >= 0) {
+        land = letzte; firma = worte.slice(0, -1).join(' ').trim();
+      }
+    }
+    firma = firma.replace(/^(die|der|das|den|firma)\s+/i, '').trim();
+    return { firma: firma, land: (land && land.trim()) ? land : null };
+  }
+
+  // Passende Partner (nach Name) aus den gruppierten Zeilen. Normalisierter Teiltreffer; exakter Treffer
+  // schlaegt Teiltreffer (verhindert unnoetige Mehrdeutigkeit). Gibt die Trefferliste (0/1/n) zurueck.
+  function kiFindePartner(gruppen, name) {
+    var q = kiNorm(name);
+    if (!q) return [];
+    var exakt = [], teil = [];
+    for (var i = 0; i < (gruppen || []).length; i++) {
+      var g = gruppen[i];
+      var gn = kiNorm(g && g.name);
+      if (!gn) continue;
+      if (gn === q) exakt.push(g);
+      else if (gn.indexOf(q) >= 0 || q.indexOf(gn) >= 0) teil.push(g);
+    }
+    return exakt.length ? exakt : teil;
+  }
+
+  // Ehrliche Antwort auf Unbekanntes: „Das kann ich noch nicht" + Liste, was geht (aus KI_AKTIONEN).
+  function kiHilfeText() {
+    var kann = [];
+    for (var i = 0; i < KI_AKTIONEN.length; i++) kann.push('• ' + KI_AKTIONEN[i].beschreibung);
+    return 'Das kann ich noch nicht. Das geht schon:\n' + kann.join('\n');
+  }
+
+  // Aktionsliste (benannte Konstante). Je Eintrag: id, art ('lesen'|'schreiben'), beschreibung, ausfuehren.
+  // 'schreiben'-Eintraege haben zusaetzlich karte(parameter) (Klartext fuer die Bestaetigungskarte).
+  var KI_AKTIONEN = [
+    { id: 'dashboard', art: 'lesen', beschreibung: 'Zum Dashboard wechseln',
+      ausfuehren: function (p, umg) { umg.navigiere('dashboard'); return { antwort: 'Ich öffne das Dashboard.' }; } },
+    { id: 'partner-liste', art: 'lesen', beschreibung: 'Die Geschäftspartner öffnen',
+      ausfuehren: function (p, umg) { umg.navigiere('partner'); return { antwort: 'Ich öffne die Geschäftspartner.' }; } },
+    { id: 'partner-akte', art: 'lesen', beschreibung: 'Die Akte eines Partners öffnen (Name sagen)',
+      ausfuehren: function (p, umg) {
+        var treffer = kiFindePartner(umg.gruppen(), p && p.name);
+        if (!treffer.length) {
+          return { antwort: 'Einen Partner „' + (p && p.name) + '" kenne ich nicht. Nenn mir den genauen Firmennamen, '
+            + 'oder frag „Wer braucht Handlungsbedarf?".' };
+        }
+        if (treffer.length > 1) {
+          var namen = [];
+          for (var i = 0; i < treffer.length; i++) namen.push(treffer[i].name || 'Unbenannt');
+          return { antwort: 'Dazu passen mehrere Partner: ' + namen.join(', ') + '. Welchen meinst du genau?' };
+        }
+        umg.zeigeAkte(treffer[0].key);
+        return { antwort: 'Ich öffne die Akte von ' + (treffer[0].name || 'diesem Partner') + '.' };
+      } },
+    { id: 'handlungsbedarf', art: 'lesen', beschreibung: 'Zeigen, wer Handlungsbedarf hat',
+      ausfuehren: function (p, umg) {
+        var d = umg.daten();
+        if (!d.handlungsbedarf.length) return { antwort: 'Gerade braucht kein Partner Handlungsbedarf – alles im grünen Bereich.' };
+        var namen = [];
+        for (var i = 0; i < d.handlungsbedarf.length; i++) namen.push(d.handlungsbedarf[i].name || 'Unbenannt');
+        return { antwort: (namen.length === 1 ? 'Ein Partner braucht' : namen.length + ' Partner brauchen')
+          + ' Handlungsbedarf: ' + namen.join(', ') + '. (' + d.rotAnzahl + ' kritisch, ' + d.gelbAnzahl + ' zu prüfen.)' };
+      } },
+    { id: 'briefing', art: 'lesen', beschreibung: 'Das Tages-Briefing vorlesen',
+      ausfuehren: function (p, umg) {
+        var d = umg.daten();
+        var satz = 'Tages-Briefing: ' + d.partnerAnzahl + ' Geschäftspartner, '
+          + d.pruefAnzahl + (d.pruefAnzahl === 1 ? ' Prüfung, ' : ' Prüfungen, ')
+          + d.rotAnzahl + ' kritisch (rot), ' + d.gelbAnzahl + ' zu prüfen (gelb).';
+        if (d.letztePruefung && d.letztePruefung.firma) {
+          satz += ' Letzte Prüfung: ' + d.letztePruefung.firma + (d.letztePruefung.datum ? ' am ' + d.letztePruefung.datum : '') + '.';
+        }
+        return { antwort: satz };
+      } },
+    { id: 'pruefung-neu', art: 'lesen', beschreibung: 'Die Maske „Neue Prüfung" öffnen',
+      ausfuehren: function (p, umg) { umg.navigiere('pruefung'); return { antwort: 'Ich öffne „Neue Prüfung". Trag Firma und Land ein und klick selbst auf „Prüfen".' }; } },
+    { id: 'tour', art: 'lesen', beschreibung: 'Eine geführte Tour durch die App starten',
+      ausfuehren: function (p, umg) { umg.starteTour(); return { antwort: 'Ich starte die Tour. Mit „Weiter"/„Zurück" geht es durch, Esc beendet.' }; } },
+    // Einziger Schreib-Eintrag: fuellt NUR die Formularfelder (kein Absenden, kein Klick auf „Prüfen").
+    { id: 'pruefung-vorbereiten', art: 'schreiben', beschreibung: 'Eine neue Prüfung vorbereiten (Formular vorausfüllen, ohne abzuschicken)',
+      karte: function (p) {
+        return { titel: 'Neue Prüfung vorbereiten?',
+          zeilen: ['Firma: ' + (p && p.firma ? p.firma : '—'),
+            'Land: ' + (p && p.land ? p.land : '(bleibt Deutschland)'),
+            'Ich fülle nur die Felder aus. Es wird NICHTS abgeschickt – du klickst selbst auf „Prüfen".'] };
+      },
+      ausfuehren: function (p, umg) {
+        umg.fuelleFormular(p && p.firma, p && p.land);
+        return { antwort: 'Formular vorbereitet für ' + (p && p.firma ? p.firma : 'die Firma')
+          + '. Bitte oben prüfen und selbst auf „Prüfen" klicken.' };
+      } }
+  ];
+
+  function findeKiAktion(id) {
+    for (var i = 0; i < KI_AKTIONEN.length; i++) if (KI_AKTIONEN[i].id === id) return KI_AKTIONEN[i];
+    return null;
+  }
+
+  // Reiner Parser: Nutzertext -> { aktion, parameter, antwort }. aktion=null -> antwort traegt die ehrliche
+  // Rueckmeldung (leer/zu lang/unbekannt/Rueckfrage). Reihenfolge wichtig: Schreib-Absicht VOR „neue Prüfung".
+  function kiVerstehe(text) {
+    var roh = String(text == null ? '' : text);
+    if (!roh.trim()) return { aktion: null, parameter: null, antwort: 'Sag mir, was ich tun soll – zum Beispiel „Wer braucht Handlungsbedarf?" oder „Tour".' };
+    if (roh.length > KI_MAX_ZEICHEN) return { aktion: null, parameter: null, antwort: 'Das ist zu lang (mehr als ' + KI_MAX_ZEICHEN + ' Zeichen). Bitte kürzer fragen.' };
+    var n = kiNorm(roh);
+
+    if (/\bvorbereit/.test(n) || /\bvorausfuell/.test(n) || (/\bfuelle?\b/.test(n) && /\baus\b/.test(n))) {
+      var zu = kiFirmaLand(roh);
+      if (!zu.firma) return { aktion: null, parameter: null, antwort: 'Für welche Firma soll ich die Prüfung vorbereiten? Zum Beispiel „Neue Prüfung vorbereiten für Muster GmbH in Deutschland".' };
+      return { aktion: 'pruefung-vorbereiten', parameter: zu, antwort: null };
+    }
+    if (/\bakte\b/.test(n) || (/\boeffne\b/.test(n) && /\bpartner\b/.test(n))) {
+      var name = kiPartnerName(roh);
+      if (!name) return { aktion: null, parameter: null, antwort: 'Welchen Partner soll ich öffnen? Nenn mir den Firmennamen, z. B. „Öffne die Akte von Muster GmbH".' };
+      return { aktion: 'partner-akte', parameter: { name: name }, antwort: null };
+    }
+    if (/\bhandlungsbedarf\b/.test(n) || /\bwer braucht\b/.test(n) || /\bwer muss\b/.test(n)
+      || (/\bkritisch\b/.test(n) && /\bwer\b/.test(n))) {
+      return { aktion: 'handlungsbedarf', parameter: {}, antwort: null };
+    }
+    if (/\bbriefing\b/.test(n) || /\btagesbriefing\b/.test(n) || /\bzusammenfassung\b/.test(n)
+      || (/\bueberblick\b/.test(n) && /\bheute\b/.test(n))) {
+      return { aktion: 'briefing', parameter: {}, antwort: null };
+    }
+    if (/\bneue? pruefung\b/.test(n) || (/\bpruefung\b/.test(n) && /\b(oeffn|start|neu|maske)/.test(n))) {
+      return { aktion: 'pruefung-neu', parameter: {}, antwort: null };
+    }
+    if (/\bgeschaeftspartner\b/.test(n) || /\bpartnerliste\b/.test(n)
+      || (/\bpartner\b/.test(n) && /\b(liste|alle|zeig|oeffn)/.test(n))) {
+      return { aktion: 'partner-liste', parameter: {}, antwort: null };
+    }
+    if (/\bdashboard\b/.test(n) || /\buebersicht\b/.test(n) || /\bstartseite\b/.test(n)) {
+      return { aktion: 'dashboard', parameter: {}, antwort: null };
+    }
+    if (/\btour\b/.test(n) || /\bfuehrung\b/.test(n) || /\brundgang\b/.test(n) || /\brundfuehrung\b/.test(n)) {
+      return { aktion: 'tour', parameter: {}, antwort: null };
+    }
+    return { aktion: null, parameter: null, antwort: kiHilfeText() };
+  }
+
+  // Controller (reine Zustands-Funktionen auf einem uebergebenen 'zustand' = { offeneKarte }). Der DOM-Teil
+  // (Block 3) ruft diese und rendert nur. 'umgebung' kapselt alle Seiteneffekte.
+  function kiFuehreAus(auftrag, umgebung) {
+    var akt = findeKiAktion(auftrag.aktionId);
+    if (!akt) return { art: 'antwort', antwort: 'Das kann ich noch nicht.' };
+    var res = akt.ausfuehren(auftrag.parameter, umgebung) || {};
+    return { art: 'antwort', antwort: res.antwort || 'Erledigt.' };
+  }
+  function kiAntwortAuf(zustand, text, umgebung) {
+    var r = kiVerstehe(text);
+    if (!r.aktion) return { art: 'antwort', antwort: r.antwort };
+    var akt = findeKiAktion(r.aktion);
+    if (!akt) return { art: 'antwort', antwort: kiHilfeText() };
+    if (akt.art === 'schreiben') {        // schreiben NIE sofort – erst Bestaetigungskarte zeigen
+      zustand.offeneKarte = { aktionId: r.aktion, parameter: r.parameter };
+      return { art: 'karte', aktionId: r.aktion, karte: akt.karte(r.parameter) };
+    }
+    return kiFuehreAus({ aktionId: r.aktion, parameter: r.parameter }, umgebung);
+  }
+  function kiBestaetige(zustand, umgebung) {
+    if (!zustand.offeneKarte) return { art: 'antwort', antwort: 'Es ist gerade nichts zu bestätigen.' };
+    var auftrag = zustand.offeneKarte;
+    zustand.offeneKarte = null;        // einmal: vor dem Ausfuehren leeren (Doppelklick fuehrt nicht zweimal aus)
+    return kiFuehreAus(auftrag, umgebung);
+  }
+  function kiAbbrechen(zustand, umgebung) {   // umgebung nur fuer Symmetrie/Mutanten-Gegenprobe; echt ungenutzt
+    if (!zustand.offeneKarte) return { art: 'antwort', antwort: 'Es ist gerade nichts offen.' };
+    zustand.offeneKarte = null;        // abbrechen: Karte verwerfen, nie ausfuehren
+    return { art: 'antwort', antwort: 'Abgebrochen, nichts geändert.' };
+  }
+
+  // Eine Chat-Zeile (Nutzer oder Assistent). Nutzer-/Antworttext IMMER nur als textContent – nie innerHTML
+  // (XSS-sicher; der Build-Selbstcheck verbietet innerHTML ohnehin). \n rendert ueber white-space:pre-wrap (CSS).
+  function kiNachrichtKnoten(wer, kiText) {
+    var box = el('div', 'cc-ki-msg cc-ki-msg-' + (wer === 'nutzer' ? 'nutzer' : 'assistent'));
+    var blase = el('div', 'cc-ki-blase');
+    blase.textContent = String(kiText == null ? '' : kiText);
+    box.appendChild(blase);
+    return box;
   }
 
   // ---- kleine Bausteine ----
@@ -633,6 +875,10 @@
     kopf.appendChild(el('p', 'cc-dash-unter', 'Dein Überblick – was heute zu tun ist.'));
     wrap.appendChild(kopf);
 
+    // S4a: Der KI-Assistent ist der ERSTE Bereich oben (ersetzt den fruehren KI-Platz-Marker). Eigenes
+    // Feld mit Eingabe, Senden, Antwortbereich und Beispiel-Chips; bedient die App ueber KI_AKTIONEN.
+    wrap.appendChild(kiFeld('dashboard'));
+
     // Bereich 1: Handlungsbedarf (Ampel NUR hier). Leer -> ruhiger Satz ohne Ampelfarbe.
     var bedarf = el('section', 'cc-dash-bereich cc-dash-bedarf');
     bedarf.appendChild(el('h3', 'cc-dash-bereich-titel', 'Handlungsbedarf'));
@@ -679,16 +925,231 @@
     abt.appendChild(karten);
     wrap.appendChild(abt);
 
-    // KI-Platz: NUR Markierung (kein Eingabefeld, kein Handler, kein Aufruf). KI kommt in S4.
-    var ki = el('section', 'cc-dash-ki');
-    ki.setAttribute('data-cc-ki-platz', 'S4');
-    var kiIcon = el('div', 'cc-dash-ki-icon');
-    kiIcon.appendChild(icon(ICON.ki, 30));
-    ki.appendChild(kiIcon);
-    ki.appendChild(el('p', 'cc-dash-ki-satz', 'Hier steht ab S4 der KI-Assistent im Mittelpunkt.'));
-    wrap.appendChild(ki);
-
+    // S4a: Der frueherre KI-Platz-Marker (data-cc-ki-platz) ist entfallen – der Assistent steht jetzt
+    // oben als erstes Feld (siehe kiFeld('dashboard') nach dem Kopf).
     return wrap;
+  }
+
+  // ==========================================================================
+  // S4a KI-Assistent – DOM-Teil (Feld im Dashboard + eigene Ansicht + Bestaetigungskarte).
+  // Baut sein DOM nur ueber el()/textContent/setAttribute (kein innerHTML, kein inline-Stil, keine
+  // Inline-Handler). Jede Instanz hat ihren eigenen Zustand (offeneKarte) und ruft die reinen
+  // Controller-Funktionen (kiAntwortAuf/kiBestaetige/kiAbbrechen). Seiteneffekte nur ueber kiUmgebung.
+  // ==========================================================================
+  // Kapselt alle Seiteneffekte, die die Ausfuehrer brauchen (lesen + navigieren + Formular vorausfuellen).
+  function kiUmgebung() {
+    return {
+      daten: function () { return dashboardDaten(brueckeZeilen()); },
+      gruppen: function () { return partnerGruppen(brueckeZeilen()); },
+      navigiere: function (modId) { waehle(modId, false); },
+      zeigeAkte: function (key) { setzeAktiv('partner'); zeigeInhalt(partnerAkteAnsicht(key)); },
+      fuelleFormular: kiFuelleFormular,
+      starteTour: function () { if (typeof kiStarteTour === 'function') kiStarteTour(); }   // Tour: Block 4
+    };
+  }
+
+  // Fuellt NUR die Formularfelder der App (#nameInput/#landInput). KEIN Absenden, KEIN Klick auf #searchBtn,
+  // KEIN input-Event. Sind die Felder nicht da (nicht eingeloggt), passiert nichts.
+  function kiFuelleFormular(firma, land) {
+    var name = document.querySelector('#nameInput');
+    var landEl = document.querySelector('#landInput');
+    if (name) name.value = String(firma == null ? '' : firma);
+    if (land != null && String(land).trim() && landEl) landEl.value = String(land);
+  }
+
+  function kiLogAnsEnde(log) { log.scrollTop = log.scrollHeight || 0; }   // Property, kein inline-Stil.
+
+  // Bestaetigungskarte als DOM-Knoten (Titel, Klartext-Zeilen, „Ja, ausführen" / „Abbrechen").
+  // Doppelklick-sicher: 'erledigt' in der UI + die Einmal-Leerung in kiBestaetige/kiAbbrechen.
+  function kiKarteKnoten(karte, zustand, umgebung, log) {
+    var box = el('div', 'cc-ki-karte');
+    box.setAttribute('data-cc-ki-karte', '1');
+    box.appendChild(el('div', 'cc-ki-karte-titel', karte.titel));
+    var liste = el('ul', 'cc-ki-karte-liste');
+    for (var i = 0; i < karte.zeilen.length; i++) liste.appendChild(el('li', 'cc-ki-karte-zeile', karte.zeilen[i]));
+    box.appendChild(liste);
+    var knoepfe = el('div', 'cc-ki-karte-knoepfe');
+    var ja = el('button', 'cc-knopf cc-ki-ja', 'Ja, ausführen');
+    ja.setAttribute('type', 'button');
+    var nein = el('button', 'cc-knopf cc-knopf-leise cc-ki-nein', 'Abbrechen');
+    nein.setAttribute('type', 'button');
+    var erledigt = false;
+    function abschliessen(res) {
+      erledigt = true;
+      box.classList.add('cc-ki-karte-aus');
+      log.appendChild(kiNachrichtKnoten('assistent', res.antwort));
+      kiLogAnsEnde(log);
+    }
+    ja.addEventListener('click', function () { if (erledigt) return; abschliessen(kiBestaetige(zustand, umgebung)); });
+    nein.addEventListener('click', function () { if (erledigt) return; abschliessen(kiAbbrechen(zustand, umgebung)); });
+    knoepfe.appendChild(ja);
+    knoepfe.appendChild(nein);
+    box.appendChild(knoepfe);
+    return box;
+  }
+
+  // Ein Ergebnis von kiAntwortAuf in den Chat-Verlauf schreiben (Antwort-Blase oder Karte).
+  function kiZeigeErgebnis(log, r, zustand, umgebung) {
+    if (r.art === 'karte') { log.appendChild(kiKarteKnoten(r.karte, zustand, umgebung, log)); kiLogAnsEnde(log); return; }
+    log.appendChild(kiNachrichtKnoten('assistent', r.antwort));
+    kiLogAnsEnde(log);
+  }
+
+  // Das Assistenz-Feld (Kopf, Chat-Verlauf, Eingabe+Senden, Beispiel-Chips). Eigener Zustand/Umgebung je Feld.
+  function kiFeld(kontext) {
+    var zustand = { offeneKarte: null };
+    var umgebung = kiUmgebung();
+    var feld = el('section', 'cc-ki-feld' + (kontext === 'ansicht' ? ' cc-ki-feld-gross' : ''));
+    feld.setAttribute('data-cc-ki', 'assistent');
+
+    feld.appendChild(el('h3', 'cc-ki-titel', 'KI-Assistent'));
+    feld.appendChild(el('p', 'cc-ki-unter',
+      'Frag mich – ich bediene die App für dich. Etwas schreiben (z. B. ein Formular vorausfüllen) tue ich erst nach deiner Bestätigung.'));
+
+    var log = el('div', 'cc-ki-log');
+    log.setAttribute('data-cc-ki-log', '1');
+    log.appendChild(kiNachrichtKnoten('assistent',
+      'Hallo! Frag mich z. B. „Wer braucht Handlungsbedarf?", „Briefing vorlesen" oder sag „Tour".'));
+    feld.appendChild(log);
+
+    var zeile = el('div', 'cc-ki-eingabe');
+    var eingabe = el('input', 'cc-ki-input');
+    eingabe.setAttribute('type', 'text');
+    eingabe.setAttribute('maxlength', String(KI_MAX_ZEICHEN));
+    eingabe.setAttribute('placeholder', 'Frag den Assistenten …');
+    eingabe.setAttribute('aria-label', 'Frage an den Assistenten');
+    var senden = el('button', 'cc-ki-senden', 'Senden');
+    senden.setAttribute('type', 'button');
+    zeile.appendChild(eingabe);
+    zeile.appendChild(senden);
+    feld.appendChild(zeile);
+
+    var chips = el('div', 'cc-ki-chips');
+    var beispiele = ['Wer braucht Handlungsbedarf?', 'Briefing vorlesen', 'Neue Prüfung öffnen', 'Tour'];
+    for (var i = 0; i < beispiele.length; i++) {
+      var chip = el('button', 'cc-ki-chip', beispiele[i]);
+      chip.setAttribute('type', 'button');
+      chip.setAttribute('data-cc-ki-beispiel', beispiele[i]);
+      chips.appendChild(chip);
+    }
+    feld.appendChild(chips);
+
+    function schicke(text) {
+      var roh = String(text == null ? '' : text);
+      if (!roh.trim()) return;
+      log.appendChild(kiNachrichtKnoten('nutzer', roh));
+      kiZeigeErgebnis(log, kiAntwortAuf(zustand, roh, umgebung), zustand, umgebung);
+      eingabe.value = '';
+    }
+    senden.addEventListener('click', function () { schicke(eingabe.value); });
+    eingabe.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); schicke(eingabe.value); } });
+    chips.addEventListener('click', function (ev) {
+      var t = ev.target && ev.target.closest ? ev.target.closest('[data-cc-ki-beispiel]') : null;
+      if (!t) return;
+      schicke(t.getAttribute('data-cc-ki-beispiel'));
+    });
+    return feld;
+  }
+
+  // Eigene Assistenz-Ansicht (Nav-Modul „ki", art 'ki') – dasselbe Feld, groesser, mit Kopfzeile.
+  function kiAnsicht() {
+    var wrap = el('div', 'cc-ki-ansicht');
+    var kopf = el('div', 'cc-dash-kopf');
+    kopf.appendChild(el('h2', 'cc-dash-titel', 'KI-Assistent'));
+    kopf.appendChild(el('p', 'cc-dash-unter', 'Dein Assistent – er bedient die App und fragt vor jedem Schreiben nach.'));
+    wrap.appendChild(kopf);
+    wrap.appendChild(kiFeld('ansicht'));
+    return wrap;
+  }
+
+  // ==========================================================================
+  // S4a Tour – gefuehrte Rundreise auf echte UI-Elemente. Feste Schrittliste KI_TOUR; Weiter/Zurueck/
+  // Beenden, Esc beendet; fehlt ein Ziel-Element -> Schritt ueberspringen (nicht abstuerzen). KEIN
+  // Auto-Start, kein Browser-Speicher (kein Web-Storage). Die Karte haengt an der Leiste (#ccShell) und erbt deren
+  // Stapel-Ebene (kein neues z-index); das jeweilige Ziel wird nur per CSS-Klasse umrandet (outline).
+  // ==========================================================================
+  var KI_TOUR = [
+    { ziel: '#ccShell', titel: 'Deine Navigation', text: 'Links wechselst du zwischen Dashboard, Geschäftspartnern, Prüfung und mehr.' },
+    { ziel: '.cc-dash-bedarf', titel: 'Handlungsbedarf', text: 'Diese Partner brauchen Aufmerksamkeit – rot ist kritisch, gelb zu prüfen.' },
+    { ziel: '.cc-dash-briefing', titel: 'Tages-Briefing', text: 'Die wichtigsten Zahlen des Tages auf einen Blick.' },
+    { ziel: '.cc-ki-feld', titel: 'Dein Assistent', text: 'Frag hier nach – er bedient die App und fragt vor jedem Schreiben nach.' },
+    { ziel: '[data-cc-modul="pruefung"]', titel: 'Neue Prüfung', text: 'Hier startest du eine neue Firmen-Prüfung.' },
+    { ziel: '[data-cc-modul="partner"]', titel: 'Geschäftspartner', text: 'Alle geprüften Firmen mit Akte und Verlauf.' }
+  ];
+  var kiTour = null;   // { index, karte, keydown } waehrend die Tour laeuft, sonst null.
+
+  function kiTourZielEl(i) {
+    var s = KI_TOUR[i];
+    return (s && s.ziel) ? document.querySelector(s.ziel) : null;
+  }
+  function kiTourEntferneMarke() {
+    var alt = document.querySelector('.cc-tour-ziel');
+    if (alt) alt.classList.remove('cc-tour-ziel');
+  }
+  // Ab 'start' in Richtung +1/-1 den ersten Schritt mit vorhandenem Ziel finden; -1 wenn keiner.
+  function kiTourNaechster(start, richtung) {
+    for (var i = start; i >= 0 && i < KI_TOUR.length; i += richtung) if (kiTourZielEl(i)) return i;
+    return -1;
+  }
+  function kiTourBaueKarte() {
+    var s = KI_TOUR[kiTour.index];
+    var karte = kiTour.karte;
+    while (karte.firstChild) karte.removeChild(karte.firstChild);
+    karte.appendChild(el('div', 'cc-tour-schritt', 'Schritt ' + (kiTour.index + 1) + ' von ' + KI_TOUR.length));
+    karte.appendChild(el('div', 'cc-tour-titel', s.titel));
+    karte.appendChild(el('p', 'cc-tour-text', s.text));
+    var knoepfe = el('div', 'cc-tour-knoepfe');
+    var beenden = el('button', 'cc-knopf cc-knopf-leise cc-tour-beenden', 'Beenden');
+    beenden.setAttribute('type', 'button');
+    beenden.addEventListener('click', kiTourBeenden);
+    knoepfe.appendChild(beenden);
+    if (kiTourNaechster(kiTour.index - 1, -1) >= 0) {
+      var zur = el('button', 'cc-knopf cc-knopf-leise cc-tour-zurueck', 'Zurück');
+      zur.setAttribute('type', 'button');
+      zur.addEventListener('click', kiTourZurueck);
+      knoepfe.appendChild(zur);
+    }
+    var weiterDa = kiTourNaechster(kiTour.index + 1, 1) >= 0;
+    var weiter = el('button', 'cc-knopf cc-tour-weiter', weiterDa ? 'Weiter' : 'Fertig');
+    weiter.setAttribute('type', 'button');
+    weiter.addEventListener('click', weiterDa ? kiTourWeiter : kiTourBeenden);
+    knoepfe.appendChild(weiter);
+    karte.appendChild(knoepfe);
+  }
+  function kiTourZeige(index, richtung) {
+    if (!kiTour) return;
+    var i = kiTourNaechster(index, richtung);
+    if (i < 0) { kiTourBeenden(); return; }
+    kiTour.index = i;
+    kiTourEntferneMarke();
+    var ziel = kiTourZielEl(i);
+    ziel.classList.add('cc-tour-ziel');
+    if (ziel.scrollIntoView) { try { ziel.scrollIntoView({ block: 'center' }); } catch (e) {} }
+    kiTourBaueKarte();
+  }
+  function kiTourWeiter() { if (kiTour) kiTourZeige(kiTour.index + 1, 1); }
+  function kiTourZurueck() { if (kiTour) kiTourZeige(kiTour.index - 1, -1); }
+  function kiTourBeenden() {
+    if (!kiTour) return;
+    kiTourEntferneMarke();
+    if (kiTour.karte && kiTour.karte.parentNode) kiTour.karte.parentNode.removeChild(kiTour.karte);
+    if (kiTour.keydown) document.removeEventListener('keydown', kiTour.keydown);
+    kiTour = null;
+  }
+  function kiStarteTour() {
+    if (kiTour) kiTourBeenden();                 // laufende Tour sauber beenden (kein Doppel-Overlay)
+    var erste = kiTourNaechster(0, 1);
+    if (erste < 0) return;                        // kein einziges Ziel da -> nichts tun, nicht abstuerzen
+    var huelle = document.getElementById('ccShell') || document.body;   // erbt deren Stapel-Ebene
+    var karte = el('aside', 'cc-tour');
+    karte.setAttribute('data-cc-tour', '1');
+    karte.setAttribute('role', 'dialog');
+    karte.setAttribute('aria-label', 'Geführte Tour');
+    huelle.appendChild(karte);
+    function aufEsc(ev) { if (ev.key === 'Escape' || ev.key === 'Esc') { if (ev.preventDefault) ev.preventDefault(); kiTourBeenden(); } }
+    document.addEventListener('keydown', aufEsc);
+    kiTour = { index: 0, karte: karte, keydown: aufEsc };
+    kiTourZeige(erste, 1);
   }
 
   // ---- „Zur Akte dieses Geschäftspartners" (erscheint, wenn #report aktiv ist) ----
@@ -761,6 +1222,7 @@
 
     if (mod.art === 'leer') { zeigeInhalt(leerKarte(mod)); aktualisiereZurAkte(); return; }
     if (mod.art === 'dashboard') { zeigeInhalt(dashboardAnsicht()); aktualisiereZurAkte(); return; }
+    if (mod.art === 'ki') { zeigeInhalt(kiAnsicht()); aktualisiereZurAkte(); return; }
     if (mod.art === 'partner') { zeigeInhalt(partnerAnsicht()); aktualisiereZurAkte(); return; }
 
     var ziel = mod.ziel ? document.querySelector(mod.ziel) : null;
